@@ -45,7 +45,7 @@ The project is built using the following technologies:
 - JavaScript
 - PHP
 - [PDF.js library](https://mozilla.github.io/pdf.js/)
-- [Fuze.js library](https://fuzejs.io/)
+- [Fuze.js library](fuzejs.io)
 - [Transformer.js AI library](https://github.com/xenova/transformers.js)
 
 ## Installation
