@@ -21,6 +21,8 @@ The Basic Federal Income Tax Course Website aims to make learning about federal 
 
 - **Course Notes Outline**: Access a comprehensive course notes outline, which can be searched using a basic search tool and enhanced with AI features.
 
+- **IRS Code Extractor**: Extract any IRS Code that is referenced in any document uploaded.
+
 ## Features
 
 1. **Quizzes**:  
