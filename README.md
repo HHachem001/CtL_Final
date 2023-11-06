@@ -7,9 +7,6 @@ Welcome to the Basic Federal Income Tax Course Website repository! This project 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Project Overview
 
@@ -37,6 +34,10 @@ The Basic Federal Income Tax Course Website aims to make learning about federal 
    - Access detailed course notes organized by topics.
    - Search for specific content.
    - Utilize AI-powered content recommendations.
+
+4. **IRS Code Extractor**:
+   - Upload PDF of a case or article
+   - Utilize RegEx to extract IRS Codes referenced in document
 
 ## Technologies Used
 
