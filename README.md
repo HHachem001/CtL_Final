@@ -1,3 +1,5 @@
+# [Vist the Tax Assistant Website](https://hhachem001.github.io/CtL_Final/Welcome.html)
+
 # Basic Federal Income Tax Assistant 
 
 Welcome to the Basic Federal Income Tax Course Website repository! This project is designed to assist users who are enrolled in a Basic Federal Income Tax course. It provides a range of features to enhance your learning experience, including quizzes, a chatbot to check your eligibility under specific IRS codes, and a searchable course notes outline with AI capabilities.
