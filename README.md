@@ -35,7 +35,6 @@ The Basic Federal Income Tax Course Website aims to make learning about federal 
 3. **Course Notes Outline**:
    - Access detailed course notes organized by topics.
    - Search for specific content.
-   - Utilize AI-powered content recommendations.
 
 4. **IRC Code Extractor**:
    - Upload PDF of a case or article
