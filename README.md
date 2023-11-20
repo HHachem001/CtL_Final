@@ -35,9 +35,9 @@ The Basic Federal Income Tax Course Website aims to make learning about federal 
    - Search for specific content.
    - Utilize AI-powered content recommendations.
 
-4. **IRS Code Extractor**:
+4. **IRC Code Extractor**:
    - Upload PDF of a case or article
-   - Utilize RegEx to extract IRS Codes referenced in document
+   - Utilize RegEx to extract IRC Codes referenced in document
 
 ## Technologies Used
 
