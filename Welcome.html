@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Taxation Learning Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #DFDFDF;
+			margin: 0;
+			padding: 0;
+		}
+
+        .navbar {
+            background-color: #3498db;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        .navbar h1 {
+            margin: 0;
+        }
+
+        .container {
+			text-align: center;
+			background-color: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
+			overflow: hidden;
+			margin: 20px auto; /* Set auto for left and right margins */
+			max-width: 1200px; /* Adjust the max-width as needed */
+		}
+
+        .header {
+            background-color: #3498db;
+            color: #FFF;
+            padding: 10px 0;
+        }
+
+        .header h1 {
+			font-size: 36px;
+			margin: 0;
+			font-style: italic; /* Add this line for italic style */
+		}
+
+        .description {
+            padding: 20px;
+			font-size: 20px;
+			
+
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .option {
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            width: 250px;
+            transition: background-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option:hover {
+            background-color: #1c6aa0;
+        }
+
+        .option i {
+            font-size: 48px;
+        }
+
+        .option-description {
+            margin-top: 1px;
+        }
+
+          /* Popup Styles */
+		.popup {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.7);
+			justify-content: center;
+			align-items: center;
+			z-index: 1000;
+		}
+
+		.popup-content {
+			background: #fff;
+			border-radius: 15px;
+			box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+			max-width: 80%;
+			width: auto;
+			text-align: center;
+			position: relative;
+			z-index: 1001;
+			padding: 30px;
+			box-sizing: border-box;
+		}
+
+		.popup-close {
+			cursor: pointer;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			font-size: 28px;
+			color: #555;
+		}
+
+		.popup-close:hover {
+			color: #333;
+		}
+
+		.popup-title {
+			font-size: 28px;
+			margin-bottom: 30px;
+			color: #333;
+		}
+
+		.popup-buttons {
+			display: flex;
+			justify-content: space-around;
+			margin-top: 30px;
+		}
+
+		.popup-buttons button {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			padding: 15px 25px;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: background-color 0.3s, color 0.3s;
+		}
+
+		.popup-buttons button:hover {
+			background-color: #45a049;
+			color: #fff;
+		}
+
+		button {
+			  padding: 10px 20px;
+			  font-size: 16px;
+			  background-color: #4CAF50; /* Green background color */
+			  color: white; /* White text color */
+			  border: none; /* Remove border */
+			  border-radius: 5px; /* Add some border radius for rounded corners */
+			  cursor: pointer; /* Add a pointer cursor on hover */
+			}
+
+			/* Change button style on hover */
+			button:hover {
+			  background-color: #45a049; /* Darker green color on hover */
+			}
+		.disclaimer {
+			color: #666; /* Adjust the color as needed */
+			font-style: italic;
+			margin-top: 10px;
+		}
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to the Basic Income Tax Learning Center</h1>
+        </div>
+        <div class="description">
+            <p>Enhance your learning experience with these educational tools. Choose from an option below to get started:</p>
+        </div>
+        <div class="options">
+            <!-- IRS ChatBot Option -->
+            <div class="option" onclick="openIRSChatBotPopup()">
+                <i class="fas fa-robot"></i>
+                <p>IRC ChatBot</p>
+                <p class="option-description">Ask questions and receive information about income tax in a conversational and user-friendly manner.</p>
+            </div>
+            <!-- Quizzes and Exams Option -->
+            <div class="option" onclick="openQuizzesPopup()">
+                <i class="fas fa-clipboard-check"></i>
+                <p>Quizzes and Exams</p>
+                <p class="option-description">Test your knowledge with quizzes and exams designed to help you practice and learn.</p>
+            </div>
+            <!-- Class Notes Memo Search Option -->
+            <div class="option" onclick="openClassNotesPopup()">
+                <i class="fas fa-search"></i>
+                <p>Course Notes Search</p>
+                <p class="option-description">Easily search and access class notes and memos to aid your learning.</p>
+            </div>
+			<!-- IRS Code Extractor Option -->
+			<div class="option" onclick="openIRSCodeExtractorPopup()">
+				<i class="fas fa-file-pdf"></i>
+				<p>IRC Code Extractor</p>
+				<p class="option-description">Upload a PDF to extract IRC codes from the document.</p>
+			</div>
+			 <!-- View Course Outline Option -->
+			<div class="option" onclick="openCourseOutline()">
+				<i class="fas fa-book"></i>
+				<p>View Course Outline</p>
+				<p class="option-description">Access the course outline for the year 2020 (will be updated soon).</p>
+			</div>
+			<!-- Feedback Option -->
+			<div class="option" onclick="redirectToFeedback()">
+				<i class="fas fa-comments"></i>
+				<p>Feedback</p>
+				<p class="option-description">Provide feedback on our services. Your opinion matters to us!</p>
+			</div>
+			</div>
+				<p class="disclaimer">Created by Hashim Hachem 2023. This tool is incomplete and may contain or produce incorrect information. </p>
+				
+			</div>
+		</div>
+
+    <!-- IRS ChatBot Popup -->
+    <div class="popup" id="irs_popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup('irs_popup')">&times;</span>
+            <p class="popup-title">Choose IRC ChatBot Option:</p>
+            <p class="disclaimer">Note ⚠️: A.I. Chatbot is an experimental feature.</p>
+            <div class="popup-buttons">
+                <button onclick="redirectTo('general.html')">✨ A.I. ChatBot</button>
+                <button onclick="redirectTo('basic_bot.html')">RegEx Chatbot</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quizzes and Exams Popup -->
+    <div class="popup" id="quizzes_popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup('quizzes_popup')">&times;</span>
+            <p class="popup-title">Would you like to take a quiz or exam?</p>
+            <div class="popup-buttons">
+                <button onclick="redirectTo('quiz.html')">Quiz</button>
+                <button onclick="redirectTo('exam.html')">Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Notes Memo Search Popup -->
+<div class="popup" id="class_notes_popup">
+    <div class="popup-content">
+        <span class="popup-close" onclick="closePopup('class_notes_popup')">&times;</span>
+        <p class="popup-title">Choose Class Notes Option:</p>
+        <p class="disclaimer">Note ⚠️: A.I. Search is an experimental feature.</p>
+        <div class="popup-buttons">
+            <button onclick="redirectTo('basic_search.html')">Regular Search</button>
+            <!-- AI Search Button with Brain Icon -->
+            <button onclick="redirectTo('ai_search.html')">
+               ✨ A.I. Search
+            </button>
+        </div>
+    </div>
+</div>
+
+	<!-- IRS Code Extractor Popup -->
+	<div class="popup" id="irs_code_extractor_popup">
+		<div class="popup-content">
+			<span class="popup-close" onclick="closePopup('irs_code_extractor_popup')">&times;</span>
+			<p class="popup-title">IRC Code Extractor:</p>
+			<p class="popup-description">Upload a PDF file to extract IRC codes.</p>
+				<button onclick="redirectTo('IRSCodeExtract.html')">Proceed</button>
+			</div>
+		</div>
+	</div>
+
+
+    <script>
+        // Function to open the IRS ChatBot popup
+        function openIRSChatBotPopup() {
+            document.getElementById('irs_popup').style.display = 'flex';
+        }
+
+        // Function to open the Quizzes and Exams popup
+        function openQuizzesPopup() {
+            document.getElementById('quizzes_popup').style.display = 'flex';
+        }
+
+        // Function to open the Class Notes Memo Search popup
+        function openClassNotesPopup() {
+            document.getElementById('class_notes_popup').style.display = 'flex';
+        }
+
+        // Function to close any popup
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+		
+		function openIRSCodeExtractorPopup() {
+			document.getElementById('irs_code_extractor_popup').style.display = 'flex';
+		}
+
+
+        // Function to redirect to a specific HTML page
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+		
+		// Function to redirect to feedback.html
+        function redirectToFeedback() {
+            window.location.href = 'feedback.html';
+        }
+		 // Function to open the course outline PDF
+        function openCourseOutline() {
+            window.open('2020outline.pdf', '_blank');
+        }
+    </script>
+</body>
+
+</html>

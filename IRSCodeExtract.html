@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRC Code Extractor Beta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f2f7ff;
+        color: #2a3f5f;
+    }
+
+    h1.title {
+        color: #1976D2;
+    }
+
+    h2.subtitle {
+        color: #455A64;
+    }
+
+    .hero.is-primary {
+        background-color: #1976D2;
+        color: #ffffff;
+    }
+
+     .file.is-boxed .file-cta {
+        justify-content: center; /* Center the file upload button */
+        align-items: center; /* Align items vertically in the center */
+    }
+
+    .file-label {
+        margin-left: 10px; /* Add some space between the icon and the label */
+    }
+
+    .file-cta, .button.is-success {
+        background-color: #1976D2;
+        color: #ffffff;
+    }
+
+    .file-name, .box.has-background-light {
+        background-color: #ffffff;
+        color: #2a3f5f;
+    }
+
+    .exit-button {
+        background-color: #E57373;
+        color: #ffffff;
+    }
+
+    .exit-button:hover {
+        background-color: #D32F2F;
+    }
+
+    .beta-disclaimer {
+        background-color: #FFC107;
+        color: #2a3f5f;
+    }
+
+    /* Adjust the width of the analyze button */
+    .button.is-success.is-fullwidth {
+        width: auto; /* Set width to auto */
+        max-width: 200px; /* Limit the maximum width */
+        margin: 0 auto; /* Center the button */
+    }
+</style>
+</head>
+
+<body>
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">
+                    IRC Code Extractor
+                </h1>
+                <h2 class="subtitle">
+                    Extract Internal Revenue Code sections from your documents.
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-two-thirds">
+                    <div class="beta-disclaimer box has-text-centered">
+                        <p>NOTE: This feature is experimental. You may encounter errors.</p>
+                    </div>
+
+                    <div class="file has-name is-boxed">
+                        <label class="file-label">
+                            <input class="file-input" type="file" id="fileInput">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Choose a file…
+                                </span>
+                            </span>
+                            <span class="file-name" id="fileName">
+                                No file uploaded
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="buttons is-centered">
+                        <button class="button is-success" onclick="processFile()">Analyze</button>
+                        <button class="button exit-button" onclick="redirectToWelcome()">Exit</button>
+                    </div>
+
+                    <div id="results" class="mt-5"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+
+
+        document.getElementById('fileInput').addEventListener('change',
+function (e) {
+            const fileNameElement = document.getElementById('fileName');
+            if (this.files.length) {
+                fileNameElement.textContent = this.files[0].name;
+            } else {
+                fileNameElement.textContent = "No file uploaded";
+            }
+        });
+
+        async function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+
+            if (file.type === "application/pdf") {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const typedArray = new Uint8Array(reader.result);
+                    processPDF(typedArray);
+                };
+                reader.readAsArrayBuffer(file);
+            } else if (file.type ===
+"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+{
+                const reader = new FileReader();
+                reader.onload = function () {
+                    processDOCX(reader.result);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                alert('Only PDF and DOCX files are supported.');
+            }
+        }
+
+        async function processPDF(typedArray) {
+            const loadingTask = pdfjsLib.getDocument({ data: typedArray });
+            const pdf = await loadingTask.promise;
+            let combinedText = "";
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                const strings = content.items.map(item => item.str);
+                combinedText += strings.join(' ');
+            }
+
+            analyzeText(combinedText);
+        }
+
+        function processDOCX(arrayBuffer) {
+            mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                .then(result => analyzeText(result.value))
+                .done();
+        }
+
+      function analyzeText(text) {
+    const subtitleRanges = {
+        A: [1, 1564],
+        B: [2001, 2801],
+        C: [3101, 3512],
+        D: [4001, 5000],
+        E: [5001, 5891],
+        F: [6001, 7874],
+        G: [8001, 8023],
+        H: [9001, 9042],
+        I: [9500, 9602],
+        J: [9701, 9722],
+        K: [9801, 9834],
+    };
+
+    const regex = /(?:(?:I\.R\.C|IRC|Internal Revenue Code)\sSection|§)\s(\d+(\.\d+)?)/g;
+    let match;
+    const resultsDiv = document.getElementById('results');
+    let foundReferences = false;
+    const codeCounts = {}; // Object to store code occurrences
+    const subtitleCategories = {};
+
+    resultsDiv.innerHTML = '';
+
+    while ((match = regex.exec(text)) !== null) {
+        foundReferences = true;
+        const codeSection = parseInt(match[1], 10) || parseFloat(match[2]);
+
+        // Find the subtitle category for the code section
+        let subtitleCategory = 'Other';
+        for (const subtitle in subtitleRanges) {
+            if (subtitleRanges.hasOwnProperty(subtitle)) {
+                const range = subtitleRanges[subtitle];
+                if (codeSection >= range[0] && codeSection <= range[1]) {
+                    subtitleCategory = subtitle;
+                    break;
+                }
+            }
+        }
+
+        // Increment the count for the code section
+        codeCounts[codeSection] = (codeCounts[codeSection] || 0) + 1;
+
+        // Increment the count for the subtitle category
+        subtitleCategories[subtitleCategory] = (subtitleCategories[subtitleCategory] || 0) + 1;
+    }
+
+    for (const subtitle in subtitleCategories) {
+        if (subtitleCategories.hasOwnProperty(subtitle)) {
+            const count = subtitleCategories[subtitle];
+
+            const subtitleParagraph = document.createElement('div');
+            subtitleParagraph.classList.add('box', 'has-background-light');
+            subtitleParagraph.innerHTML = `<strong>Subtitle ${subtitle}</strong> (${count} occurrences)`;
+
+            resultsDiv.appendChild(subtitleParagraph);
+
+            for (const codeSection in codeCounts) {
+                if (codeCounts.hasOwnProperty(codeSection)) {
+                    const codeCount = codeCounts[codeSection];
+
+                    const subtitleRange = subtitleRanges[subtitle];
+                    if (
+                        codeSection >= subtitleRange[0] &&
+                        codeSection <= subtitleRange[1]
+                    ) {
+                        const link = document.createElement('a');
+                        link.href = `https://www.law.cornell.edu/uscode/text/26/${codeSection}`;
+                        link.target = '_blank'; // Open link in a new tab
+                        link.textContent = `Found: IRC ${codeSection} (found ${codeCount} times)`;
+
+                        // Add a line break before each code section within a subtitle
+                        subtitleParagraph.appendChild(link);
+                        subtitleParagraph.appendChild(document.createElement('br'));
+                    }
+                }
+            }
+        }
+    }
+
+    if (!foundReferences) {
+        const notFoundParagraph = document.createElement('p');
+        notFoundParagraph.classList.add('is-size-5');
+        notFoundParagraph.textContent = "No IRS code references found in the document.";
+        resultsDiv.appendChild(notFoundParagraph);
+    }
+}
+
+function redirectToWelcome() {
+    window.location.href = 'https://hhachem001.github.io/CtL_Final/Welcome.html';
+}
+    </script>
+</body>
+
+</html>

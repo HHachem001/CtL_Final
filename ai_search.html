@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.I. Search</title>
+    <style>
+        /* Add your CSS styles here */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #DFDFDF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+			box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
+            width: 80%;
+            max-width: 600px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            appearance: none;
+            background-color: #fff;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" width="16" height="16" fill="%23333"><path d="M4 5l-4-4h8z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            resize: none;
+            margin-top: 10px;
+        }
+
+		button#generate-button {
+			display: block;
+			width: 100%;
+			margin: 20px 0;
+			padding: 10px;
+			background-color: #2ecc71; /* Green color for Generate Answer button */
+			color: #ffffff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 18px;
+		}
+
+		button#generate-button:hover {
+			background-color: #27ae60; /* Darker green on hover for Generate Answer button */
+		}
+
+		button#generate-button:disabled {
+			background-color: #b3c2c8;
+			cursor: not-allowed;
+		}
+
+		button#exit-button {
+			display: block;
+			width: 100%;
+			margin: 20px 0;
+			padding: 10px;
+			background-color: #e74c3c; /* Red color for Exit button */
+			color: #ffffff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 18px;
+		}
+
+		button#exit-button:hover {
+			background-color: #c0392b; /* Darker red on hover for Exit button */
+		}
+
+
+		button:disabled {
+			background-color: #b3c2c8;
+			cursor: not-allowed;
+		}
+
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #spinner {
+            display: none;
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        #spinner.show {
+            display: inline-block;
+        }
+
+        #output-div {
+            display: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+		.disclaimer {
+            font-style: italic;
+            color: #888; /* Adjust the color as needed */
+        }
+       </style>
+</head>
+<body>
+    <div class="container">
+        <label for="topic-dropdown">Select a Topic First:</label>
+        <select id="topic-dropdown">
+            <option value="" disabled selected>Please choose a topic first</option>
+			<option value="amount-realized">Amount Realized</option>
+			<option value="amortization-of-intangible-personal-property">Amortization of Intangible Personal Property</option>
+			<option value="assignment-of-income">Assignment of Income</option>
+			<option value="awards-and-prizes">Awards and Prizes</option>
+			<option value="business-deductions">Business Deductions</option>
+			<option value="business-income-deduction">Business Income Deduction</option>
+			<option value="business-loans">Business Loans</option>
+			<option value="computation-of-gain-or-loss">Computation of Gain or Loss</option>
+			<option value="damages-and-related-receipts">Damages and Related Receipts</option>
+			<option value="depreciation">Depreciation</option>
+			<option value="determination-of-basis">Determination of Basis</option>
+			<option value="discharge-of-indebtedness">Discharge of Indebtedness</option>
+			<option value="employee-benefits-and-exceptions">Employee Benefits and Exceptions</option>
+			<option value="employee-gifts">Employee Gifts</option>
+			<option value="fringe-benefits">Fringe Benefits</option>
+			<option value="gifts-and-inheritances">Gifts and Inheritances</option>
+			<option value="gains">Gains</option>
+			<option value="gross-income-section-61">Gross Income Section 61</option>
+			<option value="higher-education-cost-exclusions">Higher Education Cost Exclusions</option>
+			<option value="income-earned-abroad">Income Earned Abroad</option>
+			<option value="income-from-property">Income from Property</option>
+			<option value="income-without-receipt">Income without Receipt of Cash or Property</option>
+			<option value="life-insurance-proceeds-and-annuities">Life Insurance Proceeds and Annuities</option>
+			<option value="other-exclusions-from-gross-income">Other Exclusions from Gross Income</option>
+			<option value="receipt-of-financial-benefit">Receipt of Financial Benefit</option>
+			<option value="scholarships">Scholarships</option>
+			<option value="separation-and-divorce">Separation and Divorce</option>
+            <!-- Add more topic options here -->
+        </select>
+        <textarea id="context" style="display: none;"></textarea>
+        <textarea id="long-text-input" placeholder="Enter your question here..."></textarea>
+        <button id="generate-button" disabled>
+            <span id="spinner" style="display: none;">⏳</span> Generate Answer
+        </button>
+        <button id="exit-button">Exit</button>
+        <div id="output-div" style="display: none;"></div>
+        <p class="disclaimer">Disclaimer: Answers are generated by an AI model and may not be entirely accurate or reliable.</p>
+    </div>
+
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.8.0';
+
+        // Initialize the pipeline for question-answering
+        let answerer;
+        // Initialize the pipeline for text-to-text generation
+        let generator;
+
+        async function loadModels() {
+            answerer = await pipeline('question-answering', 'Xenova/distilbert-base-uncased-distilled-squad');
+            generator = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-783M');
+        }
+
+        // Call the loadModels function to load the AI models.
+        loadModels();
+
+        // Define generateButton here
+        const generateButton = document.getElementById('generate-button');
+        const contextTextarea = document.getElementById('context');
+        const longTextInput = document.getElementById('long-text-input');
+        const output = document.getElementById('output-div');
+        const spinner = document.getElementById('spinner');
+        const exitButton = document.getElementById('exit-button');
+
+        generateButton.addEventListener('click', async () => {
+            spinner.classList.add('show');
+            generateButton.setAttribute("disabled", true);
+
+            const question = longTextInput.value;
+            const context = contextTextarea.value;
+
+            // First, try to get an answer from the question-answering model
+            const answerResult = await answerer(question, context);
+
+            if (answerResult && answerResult.score >= 0.11) {
+                // If confidence is high, use the answer from the question-answering model
+                output.innerHTML = `Answer: ${answerResult.answer}<br>Confidence Score: ${answerResult.score}`;
+            } else {
+                // If confidence is low or no answer was found, provide additional context using the text-to-text generator
+                let fallbackOutput = await generator(question, { max_new_tokens: 100 });
+
+                // Check if the fallback context is not related to taxes, and if so, set a tax-related context
+                if (!fallbackOutput[0].generated_text.toLowerCase().includes('tax')) {
+                    fallbackOutput = await generator(question + ' related to taxes', { max_new_tokens: 100 });
+                }
+
+                output.innerHTML = `Answer: ${fallbackOutput[0].generated_text}<br>Confidence Score: Low (Fallback Mode)`;
+            }
+
+            spinner.classList.remove('show');
+            generateButton.removeAttribute("disabled");
+            output.style.display = 'block';
+        });
+
+        function loadContent() {
+            const selectedTopic = document.getElementById('topic-dropdown').value;
+            let context;
+
+            // Load content based on the selected topic
+            switch (selectedTopic) {
+                case 'amount-realized':
+                    context = 'Amount realized refers to the total cash or fair market value of property received from a sale or exchange. It plays a crucial role in determining capital gains or losses for tax purposes.';
+                    break;
+                case 'amortization-of-intangible-personal-property':
+                    context = 'Amortization of intangible personal property involves spreading the cost of intangible assets (such as patents or copyrights) over a specific time period for tax purposes. This allows businesses to recover the cost of these assets over time.';
+                    break;
+				 case 'assignment-of-income':
+            context = 'Assignment of income refers to the legal doctrine that determines who is taxed on income when it is earned. Understanding this concept is important for ensuring accurate taxation and compliance with tax laws.';
+            break;
+        case 'awards-and-prizes':
+            context = 'Awards and prizes may be subject to taxation. Understanding the tax implications of receiving awards or prizes is important, as they can affect your taxable income.';
+            break;
+        case 'business-deductions':
+            context = 'Business deductions are expenses that businesses can subtract from their gross income to calculate their taxable income. Knowing which expenses qualify for deductions is crucial for accurate tax reporting.';
+            break;
+        case 'business-income-deduction':
+            context = 'Business income deduction allows businesses to reduce their taxable income by deducting eligible expenses. This deduction is essential for businesses to lower their overall tax liability.';
+            break;
+        case 'business-loans':
+            context = 'Business loans are financial instruments that provide capital to businesses. Understanding the tax implications of business loans is important for proper financial planning and compliance with tax laws.';
+            break;
+        case 'computation-of-gain-or-loss':
+            context = 'The computation of gain or loss is a crucial step in determining the financial outcome of a transaction for tax purposes. It involves calculating the difference between the amount realized and the adjusted basis.';
+            break;
+        case 'damages-and-related-receipts':
+            context = 'Damages and related receipts may have tax implications depending on the nature of the damages. Understanding how these receipts are treated for tax purposes is important for accurate reporting.';
+            break;
+        case 'depreciation':
+            context = 'Depreciation is an accounting method that allocates the cost of tangible assets over their useful life. It is important for businesses to understand depreciation for tax purposes.';
+            break;
+        case 'determination-of-basis':
+            context = 'The determination of basis is crucial for calculating capital gains and losses. Basis is the original cost of an asset, and understanding how to determine it is essential for accurate tax reporting.';
+            break;
+        case 'discharge-of-indebtedness':
+            context = 'The discharge of indebtedness refers to the forgiveness of a debt. Understanding the tax implications of debt forgiveness is important, as it may result in taxable income for the debtor.';
+            break;
+        case 'employee-benefits-and-exceptions':
+            context = 'Employee benefits and exceptions cover a wide range of perks and benefits that employees may receive. Understanding the tax treatment of these benefits is important for both employers and employees.';
+            break;
+        case 'employee-gifts':
+            context = 'Employee gifts may have tax implications, both for the employer and the employee. Understanding the rules and limits regarding employee gifts is important for compliance with tax regulations.';
+            break;
+        case 'fringe-benefits':
+            context = 'Fringe benefits are non-monetary benefits provided to employees. These benefits may have tax implications, and understanding their treatment is important for both employers and employees.';
+            break;
+        case 'gifts-and-inheritances':
+            context = 'Gifts and inheritances may be subject to gift or estate taxes. Understanding the tax rules for gifts and inheritances is important for both the giver and the recipient.';
+            break;
+        case 'gains':
+            context = 'Gains refer to the positive difference between the amount realized from a sale or exchange and the adjusted basis of the asset. Understanding how gains are calculated is crucial for determining tax liability.';
+            break;
+        case 'gross-income-section-61':
+            context = 'Gross income, as defined in Section 61 of the Internal Revenue Code, includes all income from whatever source derived. Understanding what constitutes gross income is fundamental for accurate tax reporting.';
+            break;
+        case 'higher-education-cost-exclusions':
+            context = 'Higher education cost exclusions provide tax benefits for certain education-related expenses. Understanding these exclusions is important for individuals seeking to offset the costs of education.';
+            break;
+        case 'income-earned-abroad':
+            context = 'Income earned abroad may be subject to taxation both in the foreign country and the home country. Understanding the tax rules for foreign-earned income is crucial for individuals working internationally.';
+            break;
+        case 'income-from-property':
+            context = 'Income from property includes rental income, royalties, and other proceeds from real or personal property. Understanding how to calculate and report income from property is essential for accurate tax filing.';
+            break;
+        case 'income-without-receipt':
+            context = 'Income without the receipt of cash or property may still be subject to taxation. Understanding how non-cash income is treated for tax purposes is important for accurate reporting.';
+            break;
+        case 'life-insurance-proceeds-and-annuities':
+            context = 'Life insurance proceeds and annuities may have tax implications depending on the circumstances. Understanding the tax treatment of these financial instruments is important for beneficiaries and policyholders.';
+            break;
+        case 'other-exclusions-from-gross-income':
+            context = 'Other exclusions from gross income cover various types of income that are not included in gross income for tax purposes. Understanding these exclusions is important for accurate tax reporting.';
+            break;
+        case 'receipt-of-financial-benefit':
+            context = 'Receipt of financial benefit refers to receiving a financial advantage or gain. Understanding how these benefits are treated for tax purposes is important for accurate reporting and compliance.';
+            break;
+        case 'scholarships':
+            context = 'Scholarships may have tax implications depending on how they are used. Understanding the tax treatment of scholarships is important for both the recipients and the institutions awarding them.';
+            break;
+        case 'separation-and-divorce':
+            context = 'Separation and divorce may have significant tax implications, especially concerning alimony, property settlements, and other financial arrangements. Understanding these implications is crucial for individuals navigating the complexities of divorce.';
+            break;
+					
+                // Add more cases for other topics as needed
+                default:
+                    context = 'For tax-related questions, please specify the topic to get accurate information related to taxes.';
+                    break;
+            }
+
+            contextTextarea.value = context;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const topicDropdown = document.getElementById('topic-dropdown');
+            topicDropdown.addEventListener('change', loadContent);
+        });
+
+        exitButton.addEventListener('click', () => {
+            // Redirect to Welcome.html
+            window.location.href = 'https://hhachem001.github.io/CtL_Final/Welcome.html';
+        });
+
+        generateButton.disabled = false;
+    </script>
+</body>
+</html>

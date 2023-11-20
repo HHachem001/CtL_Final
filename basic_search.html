@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Notes Search</title>
+    <script src="https://hhachem001.github.io/CtL_Final/fuse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #0078d4;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 97%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        h3 {
+            color: #3498db;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        p.result-content {
+            font-size: 14px;
+            color: #777;
+        }
+		 /* Add styles for the exit link */
+    a {
+      display: inline-block; /* Make the link a block element */
+      padding: 10px 20px; /* Add padding for better clickability */
+      background-color: #d9534f; /* Use a red background color */
+      color: #fff; /* Set text color to white */
+      text-decoration: none; /* Remove default underline */
+      border-radius: 5px; /* Add border radius for rounded corners */
+      transition: background-color 0.3s; /* Add a smooth transition on hover */
+    }
+
+    /* Change link style on hover */
+    a:hover {
+      background-color: #c9302c; /* Darken the background color on hover */
+    }
+		
+	}
+    </style>
+</head>
+<body>
+    <h1>Basic Income Tax Search Engine</h1>
+    <div class="container">
+        <p>Search for commonly asked tax questions:</p>
+        <input type="text" id="searchInput" placeholder="Search questions...">
+        <div id="results"></div>
+		   <a href="https://hhachem001.github.io/CtL_Final/Welcome.html">Exit</a>
+    </div>
+
+    <script>
+        const data = [
+			{
+				title: "Gross Income (Section 61)",
+				content: "General Definitions All income from whatever source derived..."
+			},
+			{
+				title: "Receipt of Financial Benefit",
+				content: "Found Money/Treasure Trove Rule: When you find property..."
+			},
+			{
+				title: "Payment of Taxes by 3rd Party",
+				content: "If TP has a legal obligation to pay and the obligation is discharged by a 3rd party..."
+			},
+			{
+				title: "Punitive Damages",
+				content: "Considered income, includes lost profits and punitive damages awarded in a lawsuit..."
+			},
+			{
+				title: "Rewards/Travel Credits",
+				content: "Taxpayer realizes economic benefit/ascension of wealth = income..."
+			},
+			{
+				title: "Repayment of Loan",
+				content: "Return of principle = NOT income, interest received on loan = INCOME..."
+			},
+			{
+				title: "Unsolicited Property",
+				content: "Property received in mail is NOT income, UNLESS there is intent to retain the property or some associated benefit is shown..."
+			},
+			{
+				title: "Illegal Earnings",
+				content: "Income without Receipt of Cash or Property..."
+			},
+			{
+				title: "Unemployment Benefits",
+				content: "Pursuant to federal or state program = fully taxable..."
+			},
+			{
+				title: "Winnings from Raffle/Contest",
+				content: "Income, but can subtract the cost of the ticket..."
+			},
+			{
+				title: "Employer 'Gifts'",
+				content: "Ex: Stock, new car, considered income (in consideration of continued employment)..."
+			},
+			{
+				title: "Frequent Flyer Miles/Points",
+				content: "Does not have income unless sells or cashes them..."
+			},
+			{
+				title: "Income without Receipt of Cash or Property",
+				content: "Rental Value of TP's Own Residence, Not income..."
+			},
+			{
+				title: "Compensation of Services (Bartering)",
+				content: "If services are paid for with anything other than $$$, the FMV of the property/services must be included as income (by both parties)..."
+			},
+			{
+				title: "Benefit given from 3rd Party",
+				content: "Income, even if you are a 100% shareholder of the corporation giving benefit..."
+			},
+			{
+				title: "Imputed Income",
+				content: "Income that results when the TP performs a service for himself or his family..."
+			},
+			{
+				title: "Gifts and Inheritances (102)",
+				content: "Gifts, gross income does not include value of property acquired by gift..."
+			},
+			{
+				title: "Mere absence of legal or moral obligation to make such a payment does not establish that it is a gift...",
+				content: "Inheritances, gross income does not include the value of property acquired by gift, bequest, devise, inheritance..."
+			},
+			{
+				title: "Bequest: term of personal property transferred via will...",
+				content: "Devise: transfer of real property under the term of a will, Inheritance: real or personal property when a person dies without a will..."
+			},
+			{
+				title: "Transferor must have DONATIVE intent...",
+				content: "Transferor must be motivated out of disinterested generosity, mutual admiration, and respect..."
+			},
+			{
+				title: "Gifts, Gross income does not include value of property acquired by gift, bequest, devise, inheritance...",
+				content: "Transferor must have DONATIVE intent..."
+			},
+			{
+				title: "Gifts, Gross income does not include value of property acquired by gift...",
+				content: "Bequest: term of personal property transferred via will, Devise: transfer of real property under the term of a will, Inheritance: real or personal property when a person dies without a will..."
+			},
+			{
+				title: "Employee Gifts (102c)",
+				content: "102c, employers cannot be transferring something of value to the employee and have the employee exclude as a gift..."
+			},
+			{
+				title: "When the employer transfers payment or property...",
+				content: "Exceptions: 74c, certain employee achievements free from tax..."
+			},
+			{
+				title: "Employee Benefits/Fringe Benefits (132)",
+				content: "Fringe benefits ARE income because they are additional compensation by the employer..."
+			},
+			{
+				title: "61a1, compensation for services...",
+				content: "May take the form of property, cash; can be directly or indirectly paid..."
+			},
+			{
+				title: "Exceptions (132a):",
+				content: "132a1/132b, No additional cost service..."
+			},
+			{
+				title: "132a1/132b, No additional cost service",
+				content: "Service provided to the employee that is regularly offered to customers where..."
+			},
+			{
+				title: "132a2/132c, Qualified Employee Discount",
+				content: "Value of courtesy discounts on a good or service routinely sold by the employer at a price equal to cost..."
+			},
+			{
+				title: "132a2/132c, Qualified Employee Discount",
+				content: "132c1, Ceilings..."
+			},
+			{
+				title: "132a3/132d, Working Condition Fringe",
+				content: "Exclusion of property or services provided to the employee that the employee could have deducted or depreciated if he had paid for the item himself..."
+			},
+			{
+				title: "132a3/132e, De Minimis Fringe",
+				content: "Value of services is so small as to make required accounting for it unreasonable or impracticable..."
+			},
+			{
+				title: "132a5/132f, Qualified Transportation Fringe",
+				content: "Value of benefits provided to the employee by the employer in the form of..."
+			},
+			{
+				title: "132a5/132f, Qualified Transportation Fringe",
+				content: "132f2, Limitation of benefit..."
+			},
+			{
+				title: "132a6/132g, Qualified Moving Expenses",
+				content: "Moving expenses deductible anyway..."
+			},
+			{
+				title: "132j4, Athletic Facilities",
+				content: "Employer puts a gym at business facilities for the use of employees and families..."
+			},
+			{
+				title: "119, Meals or Lodging Furnished for Convenience of Employer",
+				content: "Grants exclusion from gross income of the value of the lodging furnished to the employee IF three conditions are met..."
+			},
+			{
+				title: "Awards",
+				content: "Always check to see if it could be de minimis fringes..."
+			},
+			{
+				title: "74a, Generally, prizes and awards = income. EXCEPTIONS:",
+				content: "74b, Exception for prizes and awards transfers to charities ONLY IF..."
+			},
+			{
+				title: "74c, Exception for Employee Awards",
+				content: "Relates to length of service or to safety..."
+			},
+			{
+				title: "74c, Exception for Employee Awards",
+				content: "74c, Exception for Employee Awards, Meaningful ceremony, not mere disguised compensation..."
+			},
+			{
+				title: "74c, Exception for Employee Awards",
+				content: "74c, Exception for Employee Awards, Amount employee can exclude to the extent to which the employer qualifies for a deduction under 274j..."
+			},
+			{
+				title: "274j, Employee Achievement Awards",
+				content: "Gross income shall not include the value of employee achievement award received by TP if the cost to the employer of the award does not exceed the amount allowable as a deduction to the employer for the cost of the award..."
+			},
+			{
+				title: "117, Scholarships and Fellowships",
+				content: "Qualified scholarships will be excluded..."
+			},
+			{
+				title: "117c, if scholarship is conditioned on provision of services = NOT EXCLUDED",
+				content: "Athletic scholarship, excluded but must be gratuitous in nature and university expects, but NOT requires, participation..."
+			},
+			{
+				title: "117c, if scholarship is conditioned on provision of services = NOT EXCLUDED",
+				content: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse)..."
+			},
+			{
+				title: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse)",
+				content: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse), Excluded if undergraduate only..."
+			},
+			{
+				title: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse)",
+				content: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse), Must not discriminate and does not have to perform services..."
+			},
+			{
+				title: "117d, Qualified Tuition Reduction (employee of educational institutions or spouse)",
+				content: "Educational Grants (employer to current/former employee)..."
+			},
+			{
+				title: "Gains",
+				content: "General Rules: If TP sells/disposes of property for more than paid, TP has a GAIN which must be reported..."
+			},
+			{
+				title: "1012, Basis:",
+				content: "The basis of the property is the cost thereof, including cash or property given to obtain an asset..."
+			},
+			{
+				title: "1012, Basis:",
+				content: "1012, Basis, Represents tax investment (investment for tax purposes in that piece of property)..."
+			},
+			{
+				title: "1001a, Computation of Gain or Loss",
+				content: "Loss = adjusted basis - amount received..."
+			},
+			{
+				title: "1001b, Amount Realized",
+				content: "Amount Realized = Money received + FMV of any property received..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Initial basis is a function of how TP acquired property..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Purchase or exchange = cost basis..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Gift = gift basis..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Depreciation = AB must subtract depreciation deduction (only to 0)..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Improvements = get added to AB..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Report unless another section says otherwise..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Abandoning is also realization..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Computation of gain or loss..."
+			},
+			{
+				title: "1011, Adjusted Basis",
+				content: "1011, Adjusted Basis, Amount realized/adjusted basis..."
+			},
+			{
+				title: "1015, Basis of Property Acquired by Gifts and Transfers in Trust",
+				content: "Motivated by disinterested generosity..."
+			},
+			{
+				title: "1015a, Donee takes Donor's basis",
+				content: "Donee takes Donor's basis, If using FMV at the time of gift, two conditions must be satisfied (exception)..."
+			},
+			{
+				title: "1015a, Donee takes Donor's basis",
+				content: "Donee takes Donor's basis, Exceptions: Donor's basis > FMV on the date of gift AND donee has sold for a loss (< FMV)..."
+			},
+			{
+				title: "Property Transfers in Divorce (1041)",
+				content: "Property transfers between spouses or former spouses, whether within one year or later, can be considered incident to divorce. The recipient's basis is usually the transferor's basis..."
+			},
+			{
+				title: "Property Acquired from a Decedent (1014)",
+				content: "The general rule is that the recipient's basis for property acquired from a decedent is the fair market value (FMV) of the property at the time of the decedent's death. There is an exception if the decedent received the property as a gift..."
+			},
+			{
+				title: "Amount Realized (1001)",
+				content: "The amount realized in a transaction includes everything you received, such as the total amount of money and the FMV of any property received. Different rules apply to various situations, including the sale of property with mortgages..."
+			},
+			{
+				title: "International Freighting Corporation Case",
+				content: "In this case, the issue was rewarding employees with stock as a bonus, which was treated as taxable income. The general rule for transfer of appreciated property was applied..."
+			},
+			{
+				title: "Sale of Mortgage with Property",
+				content: "When selling a property with a mortgage, the unpaid balance of the mortgage must be included in the seller's income. Different rules apply to recourse and non-recourse mortgages..."
+			},
+			{
+				title: "Crane v. Commissioner Case",
+				content: "This case involved the sale of inherited property with a mortgage. Calculations for adjusted basis, amount realized, and taxable gain were discussed..."
+			},
+			{
+				title: "Net Gift",
+				content: "A net gift occurs when the donor transfers property to the donee with the condition that the donee pays the gift taxes arising from the transfer. The amount paid by the donee reduces the amount of the donor's gift..."
+			},
+			{
+				title: "Life Insurance and Annuities",
+				content: "Life insurance proceeds and annuities can have tax implications. There are specific rules for excluding life insurance proceeds from gross income (Section 101) and for annuities (Section 72)..."
+			},
+			{
+				title: "Discharge of Indebtedness (Section 61a11)",
+				content: "The general rule is that when there is a discharge of debt, the amount of that discharge is considered income. There are exceptions under Section 108, including those related to insolvency and certain student loans..."
+			},
+			{
+				title: "Damages and Related Receipts",
+				content: "Damages received from various sources, such as antitrust suits and personal injury cases, can be taxable as income. However, there are exclusions for certain damages, such as those related to personal injury or sickness..."
+			},
+			{
+				title: "Separation and Divorce (Section 71)",
+				content: "Section 71 of the tax code deals with alimony, child support, and property settlements in the context of separation and divorce. It specifies rules for what is considered alimony and when it is taxable or not..."
+			},
+			{
+				title: "Other Exclusions from Gross Income",
+				content: "This section covers various exclusions from gross income, including those related to the sale of a principal residence, income earned abroad (Section 911), higher education cost exclusions, and assignment of income..."
+			},
+			{
+				title: "Assignment of Income",
+				content: "The assignment of income rules dictate how income from services and property is taxed when transferred or assigned to another party. The general principle is that the person who earns the income is responsible for taxes..."
+			},
+			{
+				title: "Income from Property",
+				content: "Income generated from property, such as interest from bonds or dividends, is generally taxable to the owner of the property. If the property's income is assigned or transferred, the new owner becomes responsible for the taxes..."
+			},
+			{
+				title: "Helvering v. Horst Case",
+				content: "This case involved the gifting of interest coupons from bonds. The court ruled that the donor is still responsible for taxes on the income because they enjoyed an economic benefit by giving away the coupons..."
+			},
+			{
+				title: "Blair v. Commissioner Case",
+				content: "In this case, a person inherited income interest from a trust and assigned a portion of future income to his children. The assignment made the children the new equitable owners of the income, and they became responsible for taxes..."
+			},
+			{
+				title: "Estate of Tranahan v. Commissioner Case",
+				content: "This case revolved around a father selling his right to receive dividends in exchange for a lump-sum payment. The transaction was considered legal and realistic, and the son paid sufficient consideration, so the dividend payments were not taxable to the father..."
+			},
+			{
+				title: "Taxation of Alimony (Section 71)",
+				content: "Alimony, or spousal support, is a critical consideration during divorce or separation. We will discuss how alimony is taxed, including the recent changes in tax laws that affect both the payer and the recipient. This section covers the requirements for payments to qualify as alimony and examines the exceptions to the general rules."
+			},
+			{
+				title: "Property Transfers and Taxation (Section 1041)",
+				content: "Property transfers, especially those between spouses or former spouses, can have significant tax implications. We'll provide detailed insights into the tax treatment of property transfers during divorce, separation, or other related events. You'll learn about the exceptions, such as transfers incident to divorce, and how they impact the basis of the property."
+			},
+			{
+				title: "Damages and Related Receipts (Section 104 and 61)",
+				content: "When it comes to compensation for personal injuries, emotional distress, or lost profits, the tax treatment varies. We'll explore the taxation of damages received in various scenarios, including antitrust suits, personal injury cases, and lost profits claims. You'll understand which types of damages are considered taxable income and which can be excluded."
+			},
+			{
+				title: "Exclusions from Gross Income (Sections 121, 911, and More)",
+				content: "Certain types of income may be excluded from your gross income, reducing your overall tax liability. We'll discuss these exclusions, covering topics such as the exclusion of gain from the sale of a principal residence, the foreign earned income exclusion, education cost exclusions, and other special provisions."
+			},
+			{
+				title: "Assignment of Income Doctrine",
+				content: "One crucial principle in taxation is the assignment of income doctrine. We will delve into this doctrine, explaining how it applies when income is assigned, transferred, or gifted, including scenarios where the assignment of income can be respected and when it leads to tax consequences."
+			},
+			{
+				title: "Chapter 14: Business Deductions - General Definitions",
+				content: "This section defines expenses incurred in earning income and emphasizes that a TP has no constitutional right to a deduction and must find a statutory provision that specifically allows the claimed deduction. It discusses what constitutes trade/business deductions for both corporations and individuals, including criteria such as 'ordinary and necessary,' 'current expense or capital outlay,' and 'business or personal reasons.'"
+			},
+			{
+				title: "Anatomy of Business Deduction (162)",
+				content: "Section 162 allows deductions for ordinary and necessary expenses paid or incurred during the taxable year in carrying on any trade or business. This section explains that these deductions include compensation, travel, lodging, and rent, as long as they are related to the trade or business."
+			},
+			{
+				title: "Travel 'Away From Home'",
+				content: "Section 162(a) allows for deductions for traveling expenses while away from home in pursuit of a trade or business. It covers deductibility of meals, lodging, and incidental expenses, as well as the concept of 'tax home.'"
+			},
+			{
+				title: "Necessary Rental and Similar Payments",
+				content: "Section 162(a)(3) allows TP to deduct rental payments for property used in their business. The deduction does not apply to property that the TP is renting but in the process of purchasing, and it discusses the disguised sales."
+			},
+			{
+				title: "Education as a Business Expense",
+				content: "Education can be treated as a necessary and ordinary business expense if it maintains or improves skills required in the trade or business or is imposed by local law or employer as a condition for retention of employment. It provides examples related to education as a business expense."
+			},
+			{
+				title: "Business Losses",
+				content: "Section 165(c) allows for the deduction of losses incurred in a trade or business, and it discusses realized losses, qualified business income deductions, and the Tax and Jobs Act."
+			},
+			{
+				title: "Qualified Business Income Deduction",
+				content: "Part of the Tax and Jobs Act, Section 199A permits TP to deduct up to 20% of domestic qualified business income. It defines qualified trade or business and specifies exceptions based on income thresholds."
+			},
+			{
+				title: "Requirements for Deducting Home Office Expenses",
+				content: "To deduct home office expenses, a TP must meet specific requirements, including using a portion of their home regularly and exclusively for business purposes. The content discusses these requirements and examples of deductible expenses."
+			},
+			{
+				title: "Deduction of Vehicle Expenses",
+				content: "TPs can deduct vehicle expenses for business use of a car, truck, or other vehicle, but they must meet certain criteria. This section explains the methods of calculating vehicle expenses and the substantiation requirements."
+			},
+			{
+				title: "Deduction for Meals and Entertainment",
+				content: "Business-related meals and entertainment expenses can be deducted, but there are limitations and documentation requirements. The content covers what qualifies as a deductible expense and the percentage that can be deducted."
+			},
+			{
+				title: "Tax Credits for Business Expenses",
+				content: "TPs may be eligible for tax credits related to specific business expenses, such as research and development credits and energy-efficient property credits. This section provides information on the available credits and their requirements."
+			},
+			{
+				title: "Depreciation and Amortization",
+				content: "This section discusses the depreciation and amortization of assets used in a trade or business, including the Modified Accelerated Cost Recovery System (MACRS). It explains how TP can recover the costs of these assets over time."
+			},
+			{
+				title: "Self-Employment Tax Deduction",
+				content: "Self-employed individuals are subject to self-employment tax. However, there is a deduction available to help reduce the tax burden. This content explains the calculation and eligibility criteria for the self-employment tax deduction."
+			},
+			{
+				title: "Deductions for Employee Benefits",
+				content: "TPs offering employee benefits like health insurance, retirement plans, and other benefits may be eligible for deductions. The content provides information on the deductions available for employee benefit expenses."
+			},
+			{
+				title: "Deductions for Bad Debts",
+				content: "Businesses may encounter bad debts when customers fail to pay their debts. The content discusses when bad debts are deductible and the specific criteria that must be met."
+			},
+			{
+				title: "Deductions for Charitable Contributions",
+				content: "This section explains how TP can deduct charitable contributions made in the course of their trade or business. It covers both cash and non-cash contributions and the documentation required."
+			},
+			{
+				title: "Section 179 Deduction",
+				content: "The Section 179 deduction allows small businesses to deduct the cost of certain qualifying property as an expense rather than depreciating it over time. This content explains the annual limits and eligible property for the Section 179 deduction."
+			},
+			{
+				title: "Qualified Business Income Deduction",
+				content: "The qualified business income deduction (QBI deduction) provides eligible businesses with a deduction of up to 20% of their qualified business income. This section outlines the criteria for eligibility and the calculation of the deduction."
+			},
+			{
+				title: "Educational Expense Deductions",
+				content: "Businesses can often deduct educational expenses for employees, including costs related to job-specific education and training. This content delves into the types of educational expenses that can be deducted and any limitations."
+			},
+			{
+				title: "Start-Up Expenses Deduction",
+				content: "Start-up expenses incurred when launching a new business can be deducted over a specific period. This section explains the rules and restrictions on deducting these costs for new businesses."
+			},
+			{
+				title: "Casualty and Theft Loss Deductions",
+				content: "Taxpayers who suffer losses due to casualties, such as natural disasters, or theft may be eligible for deductions. The content provides information on how to claim these deductions and the documentation required."
+			},
+			{
+				title: "Qualified Production Activities Deduction",
+				content: "Certain businesses engaged in domestic production activities may qualify for the qualified production activities deduction (QPA deduction). This content outlines the criteria for eligibility and the computation of the deduction."
+			},
+			{
+				title: "Deductions for Home-Based Businesses",
+				content: "Home-based businesses may be eligible for specific deductions related to their home office, utilities, and other expenses. This section offers guidance on how to claim these deductions and what qualifies."
+			},
+			{
+				title: "Fringe Benefit Deductions",
+				content: "Employers offering fringe benefits to employees can often deduct the cost of providing these benefits. The content covers various types of fringe benefits and the rules for their deduction."
+			},
+			{
+				title: "Employee Business Expenses",
+				content: "Employees who incur job-related expenses may be eligible for deductions. This section explains the criteria for deducting employee business expenses and the types of expenses that qualify."
+			},
+			{
+				title: "Capital Loss Deductions",
+				content: "When a taxpayer sells or disposes of capital assets at a loss, they may be able to deduct these capital losses. This content details the rules for deducting capital losses and any limitations."
+			},
+			{
+				title: "Self-Employment Tax Deductions",
+				content: "Self-employed individuals can deduct the employer-equivalent portion of their self-employment tax, which can help reduce their overall tax liability. This section explains how to calculate and claim this deduction."
+			},
+			{
+				title: "Research and Development (R&D) Tax Credit",
+				content: "Businesses involved in qualified research activities may be eligible for the R&D tax credit, which incentivizes innovation. This content outlines the criteria for claiming the R&D tax credit."
+			},
+			{
+				title: "Energy-Efficient Equipment Deductions",
+				content: "Businesses that invest in energy-efficient equipment may qualify for deductions under Section 179D. This section describes the types of equipment that are eligible and the deduction process."
+			},
+			{
+				title: "Qualified Opportunity Zones Tax Benefits",
+				content: "Investors in qualified opportunity zones can enjoy tax benefits, including deferral of capital gains and potential exclusion of gains. This content provides information on the requirements and tax advantages."
+			},
+			{
+				title: "Amortization of Start-Up Costs",
+				content: "Start-up costs for a new business can be amortized over time, rather than deducted all at once. This section details the rules and regulations governing the amortization of these costs."
+			},
+			{
+				title: "At-Risk Rules for Business Losses",
+				content: "The at-risk rules determine the amount of loss a taxpayer can deduct based on their investment in a business. This content explains the at-risk rules and their impact on business loss deductions."
+			},
+			{
+				title: "Domestic Production Activities Deduction (DPAD)",
+				content: "The DPAD offers tax incentives to businesses engaged in domestic production activities, such as manufacturing. This section outlines the criteria for qualifying for DPAD and how to calculate the deduction."
+			},
+			{
+				title: "Deductions for Entertainment and Meals",
+				content: "Businesses can deduct certain entertainment and meal expenses when related to legitimate business activities. This content clarifies which expenses qualify and the associated limitations."
+			},
+			{
+				title: "Health Savings Account (HSA) Deductions",
+				content: "Individuals with high-deductible health plans can make tax-deductible contributions to HSAs. This section provides information on HSA contribution limits and eligibility requirements."
+			},
+			{
+				title: "Bad Debt Deductions",
+				content: "Businesses that experience uncollectible debts may be able to deduct the amount as a bad debt expense. This content outlines the conditions for claiming bad debt deductions."
+			},
+			{
+				title: "Losses from Ponzi Schemes",
+				content: "Victims of Ponzi schemes may qualify for theft loss deductions under certain circumstances. This section explains the specific requirements for claiming these deductions."
+			},
+			{
+				title: "Home Office Deductions",
+				content: "Self-employed individuals and remote workers can claim deductions for expenses related to a home office. Learn about the criteria for qualifying and how to calculate the deduction."
+			},
+			{
+				title: "Casualty and Theft Loss Deductions",
+				content: "Taxpayers who suffer losses due to casualties, such as natural disasters, or theft may be eligible for deductions. Find out the requirements and limitations for claiming these deductions."
+			},
+			{
+				title: "Educational Expense Deductions",
+				content: "Certain educational expenses may be tax-deductible, including tuition and student loan interest. Explore the rules for deducting educational costs and eligibility criteria."
+			},
+			{
+				title: "Qualified Small Business Stock (QSBS) Exclusion",
+				content: "Investors in qualified small businesses may qualify for exclusions on capital gains when selling QSBS. This section explains the criteria and potential tax benefits."
+			},
+			{
+				title: "Cost Segregation for Commercial Real Estate",
+				content: "Commercial real estate owners can use cost segregation to accelerate depreciation and reduce tax liabilities. Learn about the cost segregation process and its advantages."
+			},
+			{
+				title: "Deductions for Charitable Contributions",
+				content: "Contributions to qualified charities can result in deductions for individual and business taxpayers. Discover the rules for documenting and claiming charitable deductions."
+			},
+			{
+				title: "Section 179 Deduction for Depreciation",
+				content: "Businesses can immediately deduct the cost of certain assets, including equipment and machinery, using Section 179. This content explains the limits and requirements for Section 179 deductions."
+			},
+			{
+				title: "Tax Credits for Energy-Efficient Homes",
+				content: "Homeowners who invest in energy-efficient improvements may be eligible for residential energy credits. Find out which home upgrades qualify and how to claim these credits."
+			},
+			{
+				title: "Employee Business Expenses Deductions",
+				content: "Employees who incur unreimbursed business expenses may be able to deduct them on their tax returns. Explore the types of expenses that qualify and how to document them properly."
+			},
+			{
+				title: "Capital Loss Deductions",
+				content: "Individuals who experience capital losses from investments can offset gains and reduce their tax liability. Learn about the rules for capital loss deductions."
+			},
+			{
+				title: "Minimizing Self-Employment Tax",
+				content: "Self-employed individuals can employ strategies to minimize their self-employment tax burden. Discover tips for reducing the impact of SE tax on your income."
+			},
+			{
+				title: "Tax Implications of Employee Stock Options",
+				content: "Employees who receive stock options as part of their compensation should be aware of the tax implications. Understand how stock options are taxed and when to exercise them."
+			},
+			{
+				title: "Alternative Minimum Tax (AMT) Explained",
+				content: "Understand the Alternative Minimum Tax (AMT) and how it can impact your tax liability, especially for high-income individuals."
+			},
+			{
+				title: "Tax Strategies for Small Businesses",
+				content: "Explore various tax strategies and deductions available to small businesses to optimize their tax position and reduce liabilities."
+			},
+			{
+				title: "Tax-Efficient Retirement Planning",
+				content: "Learn how to plan for a tax-efficient retirement by making the most of retirement accounts, such as 401(k)s and IRAs."
+			},
+			{
+				title: "Tax Benefits of Health Savings Accounts (HSAs)",
+				content: "Discover the tax advantages of HSAs, including contributions, withdrawals, and how they can be used to cover medical expenses."
+			},
+			{
+				title: "Taxation of Rental Properties",
+				content: "Rental property owners can benefit from tax deductions related to rental income, expenses, and depreciation. Explore the tax aspects of real estate investments."
+			},
+			{
+				title: "Gift Tax and Estate Tax Rules",
+				content: "Understand the rules and thresholds for gift and estate taxes, including exemptions and strategies for minimizing estate tax liability."
+			},
+			{
+				title: "Tax Implications of Stock Market Investments",
+				content: "Investors can optimize their tax position by understanding capital gains, dividends, and other tax considerations in stock market investments."
+			},
+			{
+				title: "Tax Benefits of Renewable Energy Investments",
+				content: "Learn about tax incentives for investing in renewable energy sources, such as solar panels and wind turbines, including federal and state-level credits."
+			},
+			{
+				title: "Taxation of Cryptocurrency Gains",
+				content: "Cryptocurrency traders and investors should be aware of the tax treatment of cryptocurrency gains and the importance of reporting crypto transactions."
+			},
+			{
+				title: "State Income Tax Deductions",
+				content: "Explore the differences in state income tax deductions and regulations, which vary from state to state and can significantly impact your overall tax liability."
+			},
+			{
+				title: "Amortization and Tax Deductions",
+				content: "Understand how amortization of assets can provide tax benefits for businesses and individuals, especially in cases of intangible assets like patents."
+			},
+			{
+				title: "Tax Implications of Business Sales",
+				content: "When selling a business, it's crucial to consider the tax implications and plan for capital gains, depreciation recapture, and other tax aspects."
+			},
+			{
+				title: "Depreciation",
+				content: "Buy a piece of property to use in business to produce income, but it wears out, which will be taxed. Cost of being in business. Must take over time for depreciation."
+			},
+			{
+				title: "Section 167a - Depreciation Deduction",
+				content: "In order to get a depreciation deduction, the property must be used in trade or business or held for the production of income. Inventory and property held for sale to customers are not allowed. Property held for personal use is not allowed. Land does not apply because land does not wear out."
+			},
+			{
+				title: "Section 168 - Mechanical Rules for Depreciation",
+				content: "Property must be tangible (real or personal). Intangible property like goodwill follows different depreciation rules in Section 197. Reduce basis by the amount of depreciation taken up to the sale. If you choose not to depreciate, you still need to subtract from the basis."
+			},
+			{
+				title: "Kiddie Tax",
+				content: "If a child is under 18 years old, a portion of their earnings is taxed at their parents' tax rate. The Kiddie Tax has limitations and depends on the child's earned and unearned income. There are rules for health insurance premiums."
+			},
+			{
+				title: "Capital Gain Tax Rates",
+				content: "Capital gain tax rates depend on your income. There are 0%, 15%, and 20% rates, with a maximum rate of 25% for unrecaptured gains related to depreciable property."
+			},
+			{
+				title: "Amortization of Intangible Personal Property",
+				content: "Section 197 provides for the amortization of intangible assets such as goodwill, going concern value, information base, and more over a 15-year period."
+			},
+			{
+				title: "Depreciation Rules for Realty/Real Property",
+				content: "Section 168a classifies real estate as either residential rental property or nonresidential real property. Depreciation methods and recovery periods vary based on the type of property."
+			},
+			{
+				title: "Expenses (Section 212)",
+				content: "Section 212 allows deductions for expenses related to the production of income, including the management, conservation, and maintenance of property held for income production. These expenses must be ordinary and necessary."
+			},
+			{
+				title: "Charges Arising Out of Transactions Entered into for Profit",
+				content: "Tax deductions are available for expenses related to property conversion to rental, as long as the property is held for income production. Good faith efforts to rent are often sufficient to qualify for deductions."
+			},
+			{
+				title: "Interest Deductions (Section 163)",
+				content: "Section 163 allows for the deduction of certain types of interest, such as trade or business interest and investment interest. However, personal interest is generally not deductible."
+			},
+			{
+				title: "Dean v. Commissioner",
+				content: "The Dean v. Commissioner case highlighted the imputation of interest in interest-free loans. It led to tax law changes to eliminate tax advantages in such cases."
+			},
+			{
+				title: "Mechanical Treatment of Capital Gains and Losses",
+				content: "Capital gains and losses are classified as short-term or long-term. Net capital gains are subject to specific tax rates, depending on the holding period."
+			},
+			{
+				title: "Kiddie Tax Rules",
+				content: "The Kiddie Tax applies to children under 18 and taxes a portion of their earnings at their parents' rate. Specific rules and income limitations apply."
+			},
+			{
+				title: "Tax Credits",
+				content: "Tax credits, such as the Earned Income Tax Credit (EITC) and Child Tax Credit, can directly reduce your tax liability. They are designed to provide financial relief to individuals and families with lower incomes."
+			},
+			{
+				title: "Tax Deductions vs. Tax Credits",
+				content: "Understanding the difference between tax deductions and tax credits is crucial. Deductions reduce your taxable income, while credits directly lower the amount of tax you owe. Knowing which to claim can help maximize your savings."
+			},
+			{
+				title: "Tax Withholding",
+				content: "Tax withholding is the amount taken from your paycheck to cover your income tax liability. It's essential to get your withholding right to avoid surprises during tax season."
+			},
+			{
+				title: "Estimated Tax Payments",
+				content: "For self-employed individuals and others with no withholding, estimated tax payments are made quarterly to cover income and self-employment taxes. Accurate estimates help you avoid penalties."
+			},
+			{
+				title: "Tax Filing Status",
+				content: "Choosing the correct filing status (e.g., Single, Married Filing Jointly, Head of Household) can impact your tax liability. It's important to select the one that best fits your situation."
+			},
+			{
+				title: "Tax Deductions for Homeowners",
+				content: "Homeowners can benefit from deductions related to mortgage interest, property taxes, and home improvements. These deductions can lead to significant tax savings."
+			},
+			{
+				title: "State Income Taxes",
+				content: "In addition to federal income taxes, many states levy their own income taxes. State tax rates and rules vary widely, and you need to be aware of your state's tax requirements."
+			},
+			{
+				title: "Tax-Advantaged Retirement Accounts",
+				content: "Accounts like 401(k)s and IRAs offer tax advantages for retirement savings. Contributions may be tax-deductible, and earnings can grow tax-deferred until withdrawal."
+			},
+			{
+				title: "Tax Implications of Investments",
+				content: "Different types of investments, such as stocks, bonds, and real estate, have varying tax implications. Capital gains, dividends, and interest income are taxed differently."
+			},
+			{
+				title: "Capital Losses",
+				content: "Capital losses occur when you sell an asset for less than its original purchase price. These losses can offset capital gains, reducing your overall tax liability. There are limits on the amount of capital losses you can deduct each year."
+			},
+			{
+				title: "Tax-Deferred Investments",
+				content: "Certain investments, like annuities and retirement accounts (e.g., 401(k)s and IRAs), allow you to defer taxes on your earnings until withdrawal. This can help your investments grow more quickly over time."
+			},
+			{
+				title: "Alternative Minimum Tax (AMT)",
+				content: "The AMT is a parallel tax system designed to ensure that high-income individuals pay a minimum amount of tax. It has its own set of rules and rates and can affect your tax liability if you have many deductions or tax credits."
+			},
+			{
+				title: "Taxation of Social Security Benefits",
+				content: "Social Security benefits may be subject to federal income tax if your total income exceeds a certain threshold. Understanding how these benefits are taxed is important for retirement planning."
+			},
+			{
+				title: "Foreign Income and Taxes",
+				content: "If you earn income from foreign sources, you may have additional tax obligations. Reporting foreign income and understanding tax treaties is crucial to avoid legal issues."
+			},
+			{
+				title: "Gift Tax and Estate Tax",
+				content: "Gift tax and estate tax are levied on large transfers of wealth. Understanding these taxes and their exemptions is important for estate planning and minimizing the tax impact on your heirs."
+			},
+			{
+				title: "Tax Planning and Strategies",
+				content: "Tax planning involves making financial decisions that optimize your tax situation. Strategies like income splitting, tax-efficient investments, and charitable contributions can help reduce your tax burden."
+			},
+			{
+				title: "Tax Records and Documentation",
+				content: "Maintaining accurate tax records and documentation is crucial. In case of an audit, having well-organized records can make the process smoother and help substantiate your deductions."
+			},
+			{
+				title: "Tax Software and Professionals",
+				content: "You can prepare your taxes using tax software or seek assistance from tax professionals. Choosing the right method depends on your financial situation and comfort level with tax regulations."
+			},
+			{
+				title: "Tax Penalties and Interest",
+				content: "Failing to file your taxes or pay taxes owed on time can result in penalties and interest charges. Understanding the consequences of late payments and addressing them promptly is important."
+			}
+		];
+
+        const options = {
+            keys: ["title", "content"],
+        };
+
+        const fuse = new Fuse(data, options);
+
+        const searchInput = document.getElementById("searchInput");
+        const resultsDiv = document.getElementById("results");
+
+        searchInput.addEventListener("input", function (e) {
+            const searchTerm = e.target.value;
+            const searchResults = fuse.search(searchTerm);
+
+            if (searchResults.length === 0) {
+                resultsDiv.innerHTML = "No results found.";
+            } else {
+                resultsDiv.innerHTML = ""; // Clear previous results
+
+                searchResults.forEach(result => {
+                    const resultDiv = document.createElement("div");
+                    resultDiv.innerHTML = `<h3>${result.item.title}</h3><p>${result.item.content}</p>`;
+                    resultsDiv.appendChild(resultDiv);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
