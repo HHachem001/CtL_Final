@@ -51,11 +51,3 @@ The project is built using the following technologies:
 - [Fuze.js library](https://www.fusejs.io/)
 - [Transformer.js AI library](https://github.com/xenova/transformers.js)
 
-## Installation
-
-To run this project locally, follow these steps:
-
-1. Clone the repository to your local machine using the following command:
-
-   ```bash
-   git clone https://github.com/HHachem001/CtL_Final.git
