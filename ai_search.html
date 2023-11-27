@@ -10,14 +10,14 @@
             box-sizing: border-box;
         }
 
-       body {
+   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url('gradient.jpg') center/cover no-repeat; /* Replace 'your-image-url.jpg' with the actual path to your image */
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    background: url('gradient.jpg') center/cover no-repeat; /* Replace 'gradient.jpg' with the actual path to your image */
     position: relative;
 }
 
@@ -30,17 +30,17 @@ body::before {
     left: 0;
     background: rgba(0, 0, 0, 0.5); /* Adjust the last value (0.5) for the desired level of dimness */
     pointer-events: none; /* This line allows clicks to pass through the overlay to the elements beneath */
+    z-index: -1; /* Place the overlay behind the content */
 }
 
-
-        .container {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 30px;
-			box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
-            width: 80%;
-            max-width: 600px;
-        }
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
+    width: 80%;
+    max-width: 600px;
+}
 
         label {
             display: block;
