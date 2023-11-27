@@ -1,329 +1,611 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Taxation Learning Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax - Welcome</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-             background: rgb(2,0,36);
-	     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-			margin: 0;
-			padding: 0;
-		}
-
-        .navbar {
-            background-color: #3498db;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 20px;
-        }
-
-        .navbar h1 {
+   <style>
+      body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #E1E1E1;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
-			text-align: center;
-			background-color: #ffffff;
-			border-radius: 10px;
-			box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
-			overflow: hidden;
-			margin: 20px auto; /* Set auto for left and right margins */
-			max-width: 1200px; /* Adjust the max-width as needed */
-		}
+            max-width: 850px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
 
         .header {
-            background-color: #3498db;
-            color: #FFF;
-            padding: 10px 0;
-        }
-
-        .header h1 {
-			font-size: 36px;
-			margin: 0;
-			font-style: italic; /* Add this line for italic style */
-		}
-
-        .description {
-            padding: 20px;
-			font-size: 20px;
-			
-
-        }
-
-        .options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .option {
-            background-color: #3498db;
+            background-color: #002855;
             color: #fff;
-            text-decoration: none;
-            border: none;
             padding: 20px;
-            border-radius: 10px;
-            width: 250px;
-            transition: background-color 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            border-radius: 3px 3px 0 0;
+            font-size: 24px;
         }
 
-        .option:hover {
-            background-color: #1c6aa0;
-        }
-
-        .option i {
-            font-size: 48px;
-        }
-
-        .option-description {
-            margin-top: 1px;
-        }
-
-          /* Popup Styles */
-		.popup {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.7);
-			justify-content: center;
-			align-items: center;
-			z-index: 1000;
-		}
-
-		.popup-content {
-			background: #fff;
-			border-radius: 15px;
-			box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-			max-width: 80%;
-			width: auto;
-			text-align: center;
-			position: relative;
-			z-index: 1001;
-			padding: 30px;
-			box-sizing: border-box;
-		}
-
-		.popup-close {
-			cursor: pointer;
-			position: absolute;
-			top: 15px;
-			right: 15px;
-			font-size: 28px;
-			color: #555;
-		}
-
-		.popup-close:hover {
-			color: #333;
-		}
-
-		.popup-title {
-			font-size: 28px;
-			margin-bottom: 30px;
-			color: #333;
-		}
-
-		.popup-buttons {
-			display: flex;
-			justify-content: space-around;
-			margin-top: 30px;
-		}
-
-		.popup-buttons button {
-			background-color: #4CAF50;
-			color: #fff;
-			border: none;
-			padding: 15px 25px;
-			border-radius: 8px;
-			cursor: pointer;
-			transition: background-color 0.3s, color 0.3s;
-		}
-
-		.popup-buttons button:hover {
-			background-color: #45a049;
-			color: #fff;
-		}
-
-		button {
-			  padding: 10px 20px;
-			  font-size: 16px;
-			  background-color: #4CAF50; /* Green background color */
-			  color: white; /* White text color */
-			  border: none; /* Remove border */
-			  border-radius: 5px; /* Add some border radius for rounded corners */
-			  cursor: pointer; /* Add a pointer cursor on hover */
-			}
-
-			/* Change button style on hover */
-			button:hover {
-			  background-color: #45a049; /* Darker green color on hover */
-			}
-		.disclaimer {
-			color: #666; /* Adjust the color as needed */
+        h1 {
+            font-size: 28px;
+            margin: 0;
 			font-style: italic;
-			margin-top: 10px;
+        }
+
+	h2 {
+            font-size: 25px;
+            margin: 0;
+			font-style: italic;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .welcome-message {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+	    border-style: inset;
+        }
+
+        .department-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .disclaimer {
+            font-size: 14px;
+            color: #777;
+			font-style: italic;
+        }
+
+        #toggleBackgroundButton {
+            background-color: #0078d4;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #toggleBackgroundButton:hover {
+            background-color: #005aa0;
+        }
+
+        .logout-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #logout-button {
+            background-color: #FF0000;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #logout-button:hover {
+            background-color: #CC0000;
+        }
+
+        /* Popup styles */
+        .popup-container {
+            background-color: #fff;
+            max-width: 400px;
+            margin: 0 auto;
+            border: 2px solid #002855;
+            box-shadow: 2px 2px 100px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            display: none;
+            z-index: 9999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .popup-header {
+            background-color: #002855;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .popup-header:hover {
+            background-color: #005aa0;
+        }
+
+        .popup-close {
+            font-size: 20px;
+            padding-right: 10px;
+            cursor: pointer; /* Added cursor style */
+        }
+
+        .popup-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .popup-button {
+            background-color: #0078d4;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .popup-button:hover {
+            background-color: #005aa0;
+        }
+
+        /* Background container styles */
+        #background-container {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+		img {
+            width: 310px;
+            height: 300px;
+            margin: -70px;
+        }
+		    #chat-container {
+            width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+
+        #chat-header {
+            background-color: #002855;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        #exit-btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+
+        #chat-messages {
+            padding: 20px;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        #user-input {
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-top: 1px solid #ddd;
+            display: flex;
+        }
+
+        #input-text {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        #send-btn {
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        #chat-icon-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        #chat-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        #chat-icon-text {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* Add this style to hide the user input and "Send" button */
+        #user-input {
+            display: none;
+        }
+		.user-tag {
+			color: blue;
 		}
+
+		.bot-tag {
+			color: green;
+		}
+
+		#chat-messages div {
+			text-align: left;
+			margin-bottom: 10px;
+		}
+
+		#chat-messages .user-tag {
+			font-weight: bold;
+		}
+
+		#chat-messages .bot-tag {
+			font-weight: bold;
+		}
+		.button-A1 {
+		  background: #5E5DF0;
+		  border-radius: 10px;
+		  box-shadow: #5E5DF0 0 10px 20px -10px;
+		  box-sizing: border-box;
+		  color: #FFFFFF;
+		  cursor: pointer;
+		  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+		  font-size: 16px;
+		  font-weight: 700;
+		  line-height: 24px;
+		  opacity: 1;
+		  outline: 0 solid transparent;
+		  padding: 8px 18px;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  touch-action: manipulation;
+		  width: fit-content;
+		  word-break: break-word;
+		  border: 0;
+		}
+
+		.button-A1:hover {
+		  background: #3e40b8; /* Change the color for hover state (green in this case) */
+		}
+		/* Add this style for the "Thinking" animation */
+		@keyframes thinkingAnimation {
+			0% { opacity: 0; }
+			50% { opacity: 1; }
+			100% { opacity: 0; }
+		}
+
+		.thinking-message {
+			animation: thinkingAnimation 2s infinite; /* Adjust the duration as needed */
+		}
+		/* Add this style to your existing CSS or in a separate style block */
+		#loading-indicator {
+			display: none;
+			text-align: center;
+			padding: 20px;
+		}
+
+		.loading-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.loader {
+				transform: rotateZ(45deg);
+				perspective: 1000px;
+				border-radius: 50%;
+				width: 48px;
+				height: 48px;
+				color: #002855;
+			  }
+				.loader:before,
+				.loader:after {
+				  content: '';
+				  display: block;
+				  position: absolute;
+				  top: 0;
+				  left: 0;
+				  width: inherit;
+				  height: inherit;
+				  border-radius: 50%;
+				  transform: rotateX(70deg);
+				  animation: 1s spin linear infinite;
+				}
+				.loader:after {
+				  color: #FF3D00;
+				  transform: rotateY(70deg);
+				  animation-delay: .4s;
+				}
+
+			  @keyframes rotate {
+				0% {
+				  transform: translate(-50%, -50%) rotateZ(0deg);
+				}
+				100% {
+				  transform: translate(-50%, -50%) rotateZ(360deg);
+				}
+			  }
+
+			  @keyframes rotateccw {
+				0% {
+				  transform: translate(-50%, -50%) rotate(0deg);
+				}
+				100% {
+				  transform: translate(-50%, -50%) rotate(-360deg);
+				}
+			  }
+
+      @keyframes spin {
+        0%,
+        100% {
+          box-shadow: .2em 0px 0 0px currentcolor;
+        }
+        12% {
+          box-shadow: .2em .2em 0 0 currentcolor;
+        }
+        25% {
+          box-shadow: 0 .2em 0 0px currentcolor;
+        }
+        37% {
+          box-shadow: -.2em .2em 0 0 currentcolor;
+        }
+        50% {
+          box-shadow: -.2em 0 0 0 currentcolor;
+        }
+        62% {
+          box-shadow: -.2em -.2em 0 0 currentcolor;
+        }
+        75% {
+          box-shadow: 0px -.2em 0 0 currentcolor;
+        }
+        87% {
+          box-shadow: .2em -.2em 0 0 currentcolor;
+        }
+      }
+   
+		.department-button {
+		  appearance: button;
+		  background-color: #002855;
+		  background-image: none;
+		  border: 1px solid #000;
+		  border-radius: 4px;
+		  box-shadow: #fff 4px 4px 0 0,#000 4px 4px 0 1px;
+		  box-sizing: border-box;
+		  color: #fff;
+		  cursor: pointer;
+		  display: inline-block;
+		  font-family: ITCAvantGardeStd-Bk,Arial,sans-serif;
+		  font-size: 20px;
+		  font-weight: 400;
+		  line-height: 50px;
+		  margin: 0 5px 10px 0;
+		  overflow: visible;
+		  padding: 12px 40px;
+		  text-align: center;
+		  text-transform: none;
+		  touch-action: manipulation;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  vertical-align: middle;
+		  white-space: nowrap;
+		}
+
+		.department-button:focus {
+		  text-decoration: none;
+		}
+
+		.department-button:hover {
+		  text-decoration: none;
+		  background-color: #0A88B0
+		}
+
+		.department-button:active {
+		  box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
+		  outline: 0;
+		}
+
+		.department-button:not([disabled]):active {
+		  box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+		  transform: translate(2px, 2px);
+		}
+
+		@media (min-width: 768px) {
+		  .button-50 {
+			padding: 12px 50px;
+		  }
+		}
+		
     </style>
 </head>
 
-<body>
 
+<body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to the Basic Income Tax Learning Center</h1>
+            <h1>Welcome to the Basic Income Tax Course Assistant!</h1>
         </div>
-        <div class="description">
-            <p>Enhance your learning experience with these educational tools. Choose from an option below to get started:</p>
-        </div>
-        <div class="options">
-            <!-- IRS ChatBot Option -->
-            <div class="option" onclick="openIRSChatBotPopup()">
-                <i class="fas fa-robot"></i>
-                <p>IRC ChatBot</p>
-                <p class="option-description">Ask questions and receive information about income tax in a conversational and user-friendly manner.</p>
-            </div>
-            <!-- Quizzes and Exams Option -->
-            <div class="option" onclick="openQuizzesPopup()">
-                <i class="fas fa-clipboard-check"></i>
-                <p>Quizzes and Exams</p>
-                <p class="option-description">Test your knowledge with quizzes and exams designed to help you practice and learn.</p>
-            </div>
-            <!-- Class Notes Memo Search Option -->
-            <div class="option" onclick="openClassNotesPopup()">
-                <i class="fas fa-search"></i>
-                <p>Course Notes Search</p>
-                <p class="option-description">Easily search and access class notes and memos to aid your learning.</p>
-            </div>
-			<!-- IRS Code Extractor Option -->
-			<div class="option" onclick="openIRSCodeExtractorPopup()">
-				<i class="fas fa-file-pdf"></i>
-				<p>IRC Code Extractor</p>
-				<p class="option-description">Upload a PDF to extract IRC codes from the document.</p>
-			</div>
-			 <!-- View Course Outline Option -->
-			<div class="option" onclick="openCourseOutline()">
-				<i class="fas fa-book"></i>
-				<p>View Course Outline</p>
-				<p class="option-description">Access the course outline for the year 2020 (will be updated soon).</p>
-			</div>
-			<!-- Feedback Option -->
-			<div class="option" onclick="redirectToFeedback()">
-				<i class="fas fa-comments"></i>
-				<p>Feedback</p>
-				<p class="option-description">Provide feedback on our services. Your opinion matters to us!</p>
-			</div>
-			</div>
-				<p class="disclaimer">Created by Hashim Hachem 2023. This tool is incomplete and may contain or produce incorrect information. </p>
-				
-			</div>
-		</div>
+        <div class="content">
+            <div class="welcome-message">
+				<h2>Enhance your learning experience with these educational tools. Choose from an option below to get started:
 
-    <!-- IRS ChatBot Popup -->
-    <div class="popup" id="irs_popup">
-        <div class="popup-content">
-            <span class="popup-close" onclick="closePopup('irs_popup')">&times;</span>
-            <p class="popup-title">Choose IRC ChatBot Option:</p>
-            <p class="disclaimer">Note ⚠️: A.I. Chatbot is an experimental feature.</p>
-            <div class="popup-buttons">
-                <button onclick="redirectTo('general.html')">✨ A.I. ChatBot</button>
-                <button onclick="redirectTo('basic_bot.html')">RegEx Chatbot</button>
+</h2>
+            </div>
+            <div class="department-buttons">
+                <button class="department-button" onclick="openPopup('LegalSummarizer')">
+                    <i class="fas fa-robot"></i>
+                    <span>IRC Chatbot</span>
+					
+                </button>
+                <button class="department-button" onclick="openPopup('DatabaseSearch')">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Quizzes and Exams</span>
+                </button>
+                <button class="department-button" onclick="openPopup('DraftDocument')">
+                    <i class="fas fa-search"></i>
+                    <span>Course Notes Search</span>
+                </button>
+		<button class="department-button" onclick="redirectTaskManager()">
+		     <i class="fa-regular fa-file-pdf"></i>
+		     <span>IRC Code Extractor</span>
+		</button>
+		<button class="department-button" onclick="redirectHelp()">
+		      <i class="fas fa-book"></i>
+		     <span>View Course Outline</span>
+		</button>
+		<button class="department-button" onclick="redirectFeedback()">
+		     <i class="fa-solid fa-comments"></i>
+		     <span>Feedback</span>
+		</button>
+            </div>
+            <p class="disclaimer">Created by Hashim Hachem 2023. This is an educational demo and should not be relied on as a source of legal authority.</p>
+          
+		  <div class="logout-button-container">
+                <button id="logout-button" onclick="logout()">Exit</button>
             </div>
         </div>
     </div>
 
-    <!-- Quizzes and Exams Popup -->
-    <div class="popup" id="quizzes_popup">
-        <div class="popup-content">
-            <span class="popup-close" onclick="closePopup('quizzes_popup')">&times;</span>
-            <p class="popup-title">Would you like to take a quiz or exam?</p>
-            <div class="popup-buttons">
-                <button onclick="redirectTo('quiz.html')">Quiz</button>
-                <button onclick="redirectTo('https://hhachem001.github.io/CtL_Final/construction.html')">Exam</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Class Notes Memo Search Popup -->
-<div class="popup" id="class_notes_popup">
-    <div class="popup-content">
-        <span class="popup-close" onclick="closePopup('class_notes_popup')">&times;</span>
-        <p class="popup-title">Choose Class Notes Option:</p>
-        <p class="disclaimer">Note ⚠️: A.I. Search is an experimental feature.</p>
-        <div class="popup-buttons">
-            <button onclick="redirectTo('basic_search.html')">Search Engine</button>
-            <!-- AI Search Button with Brain Icon -->
-            <button onclick="redirectTo('ai_search.html')">
-               ✨ A.I. Search
-            </button>
-        </div>
-    </div>
+    <!-- Popup containers -->
+    <div class="popup-container" id="popup-LegalSummarizer">
+        <div class="popup-header" onclick="closePopup('LegalSummarizer')">
+    <span>IRC ChatBot options:</span>
+    <span class="popup-close">✖</span>
 </div>
+        <div class="popup-content">
+            <p>What would you like to do:</p>
+            <button class="popup-button" onclick="performAction('LegalSummarizer Action 2', 'general.html')">✨ A.I. ChatBot</button>
+            <button class="popup-button" onclick="performAction('LegalSummarizer Action 3', 'basic_bot.html')">RegEx Chatbot</button>
+        </div>
+    </div>
 
-	<!-- IRS Code Extractor Popup -->
-	<div class="popup" id="irs_code_extractor_popup">
-		<div class="popup-content">
-			<span class="popup-close" onclick="closePopup('irs_code_extractor_popup')">&times;</span>
-			<p class="popup-title">IRC Code Extractor:</p>
-			<p class="popup-description">Upload a PDF file to extract IRC codes.</p>
-				<button onclick="redirectTo('IRSCodeExtract.html')">Proceed</button>
-			</div>
-		</div>
-	</div>
+    <div class="popup-container" id="popup-DatabaseSearch">
+        <div class="popup-header" onclick="closePopup('DatabaseSearch', 'Welcome.html')">
+            <span>Quiz / Exam Options</span>
+            <span class="popup-close">✖</span>
+        </div>
+        <div class="popup-content">
+            <p>Select an option below:</p>
+            <button class="popup-button" onclick="performAction('Housing Court Action 1', 'quiz.html')">Take a Quiz</button>
+            <button class="popup-button" onclick="performAction('Housing Court Action 2', 'https://hhachem001.github.io/CtL_Final/construction.html')">Take a Exam</button>
+        </div>
+    </div>
 
+    <div class="popup-container" id="popup-DraftDocument">
+        <div class="popup-header" onclick="closePopup('DraftDocument', 'Welcome.html')">
+            <span>Course Notes Search</span>
+            <span class="popup-close">✖</span>
+        </div>
+        <div class="popup-content">
+            <p>Which search tool would you like to use?</p>
+            <button class="popup-button" onclick="performAction('Contract Review Action 1', 'basic_search.html')">Search Engine</button>
+            <button class="popup-button" onclick="performAction('Contract Review Action 2', 'ai_search.html')">✨ A.I. Search</button>
+        </div>
+    </div>
+
+    <div id="background-container"></div>
 
     <script>
-        // Function to open the IRS ChatBot popup
-        function openIRSChatBotPopup() {
-            document.getElementById('irs_popup').style.display = 'flex';
-        }
-
-        // Function to open the Quizzes and Exams popup
-        function openQuizzesPopup() {
-            document.getElementById('quizzes_popup').style.display = 'flex';
-        }
-
-        // Function to open the Class Notes Memo Search popup
-        function openClassNotesPopup() {
-            document.getElementById('class_notes_popup').style.display = 'flex';
-        }
-
-        // Function to close any popup
-        function closePopup(popupId) {
-            document.getElementById(popupId).style.display = 'none';
-        }
-		
-		function openIRSCodeExtractorPopup() {
-			document.getElementById('irs_code_extractor_popup').style.display = 'flex';
-		}
+	let currentOpenPopup = null;
 
 
-        // Function to redirect to a specific HTML page
-        function redirectTo(url) {
-            window.location.href = url;
+        function openPopup(department) {
+    // Close the current open popup (if any)
+    if (currentOpenPopup) {
+        document.getElementById(currentOpenPopup).style.display = 'none';
+    }
+
+    // Open the new popup
+    var popup = document.getElementById('popup-' + department);
+    if (popup) {
+        popup.style.display = 'block';
+        // Update the current open popup
+        currentOpenPopup = 'popup-' + department;
+    }
+}
+       // Function to close the popup for a specific department without redirecting
+function closePopup(department) {
+    var popup = document.getElementById('popup-' + department);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}
+
+
+        // Function to perform an action (e.g., open a page) for a specific department
+        function performAction(action, pageURL) {
+            window.location.href = pageURL; // Redirect to the specified page URL
         }
-		
-		// Function to redirect to feedback.html
-        function redirectToFeedback() {
-            window.location.href = 'feedback.html';
+
+        // Function to handle user logout
+        function logout() {
+            window.location.href = 'https://hhachem001.github.io/CtL_Final/'; // Redirect to the logout page
         }
-		 // Function to open the course outline PDF
-        function openCourseOutline() {
-            window.open('2020outline.pdf', '_blank');
-        }
+
+        
     </script>
-</body>
+	
+	<script>
+    function redirectFeedback() {
+        window.location.href = 'feedback.html';
+    }
+</script>
 
+	<script>
+    function redirectTaskManager() {
+        window.location.href = 'IRSCodeExtract.html';
+    }
+</script>
+
+	<script>
+    function redirectHelp() {
+        window.location.href = '2020outline.pdf';
+    }
+</script>
+
+</body>
 </html>
