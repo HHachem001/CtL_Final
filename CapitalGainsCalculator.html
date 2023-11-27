@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capital Gains Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #4285f4;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4285f4;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        .results-container {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        span {
+            font-weight: bold;
+            color: #4285f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Capital Gains Calculator</h1>
+
+    <label for="ltcg">Long Term Capital Gain (LTCG): </label>
+    <input type="number" id="ltcg">
+
+    <label for="ltcl">Long Term Capital Loss (LTCL): </label>
+    <input type="number" id="ltcl">
+
+    <label for="stcg">Short Term Capital Gain (STCG): </label>
+    <input type="number" id="stcg">
+
+    <label for="stcl">Short Term Capital Loss (STCL): </label>
+    <input type="number" id="stcl">
+
+    <label for="salary">Salary: </label>
+    <input type="number" id="salary">
+
+    <label for="filingStatus">Filing Status: </label>
+    <select id="filingStatus">
+        <option value="single">Single</option>
+        <option value="married">Married Filing Jointly</option>
+        <option value="headOfHousehold">Head of Household</option>
+        <!-- Add more filing status options as needed -->
+    </select>
+
+    <label for="deductionChoice">Deduction Choice: </label>
+    <select id="deductionChoice">
+        <option value="standard">Standard Deduction</option>
+        <option value="itemized">Itemized Deduction</option>
+    </select>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="results-container">
+        <h2>Results:</h2>
+        <p><span>Net Long Term Capital Gain (NLTCG): </span><span id="nltcg"></span></p>
+        <p><span>NSTCL or NSTCG will be displayed here: </span><span id="nstcl"></span></p>
+        <p><span>Net Gain (NG): </span><span id="ng"></span></p>
+        <p><span>Net Capital Gain (NCG): </span><span id="ncg"></span></p>
+        <p><span>Capital Loss (CL): </span><span id="cl"></span></p>
+        <p><span>Gross Income (GI): </span><span id="gi"></span></p>
+        <p><span>Adjusted Gross Income (AGI): </span><span id="agi"></span></p>
+        <p><span>Total Income (TI): </span><span id="ti"></span></p>
+        <p><span>Ordinary Income: </span><span id="ordinaryIncome"></span></p>
+    </div>
+
+  <script>
+    function calculate() {
+        const ltcg = parseFloat(document.getElementById('ltcg').value) || 0;
+        const ltcl = parseFloat(document.getElementById('ltcl').value) || 0;
+        const stcg = parseFloat(document.getElementById('stcg').value) || 0;
+        const stcl = parseFloat(document.getElementById('stcl').value) || 0;
+        const salary = parseFloat(document.getElementById('salary').value) || 0;
+        const filingStatus = document.getElementById('filingStatus').value;
+        const deductionChoice = document.getElementById('deductionChoice').value;
+
+        const nltcg = ltcg - ltcl;
+        const nstcl = stcl - stcg;
+        const ng = ltcg + stcg;
+        const ncg = nstcl < 0 ? nltcg : nltcg - nstcl;
+        const cl = stcl + ltcl;
+        const gi = salary + ng;
+        const agi = gi - cl;
+
+     // Display NSTCL or NSTCG based on the sign
+        const nstclDisplayValue = Math.abs(nstcl).toFixed(2);
+        const nstclDisplayText = nstcl < 0 ? `NSTCL: ${nstclDisplayValue}` : `NSTCG: ${nstclDisplayValue}`;
+        
+        // Calculate Total Income (TI)
+        const ti = deductionChoice === 'standard' ? agi - getStandardDeduction(filingStatus) : agi; 
+
+        // Calculate Ordinary Income
+        const ordinaryIncome = ti - ncg;
+
+        document.getElementById('nltcg').innerText = nltcg.toFixed(2);
+document.getElementById('nstcl').innerText = nstcl < 0 ? `NSTCL: ${nstclDisplayValue}` : `NSTCG: ${nstclDisplayValue}`;
+        document.getElementById('ng').innerText = ng.toFixed(2);
+        document.getElementById('ncg').innerText = ncg.toFixed(2);
+        document.getElementById('cl').innerText = cl.toFixed(2);
+        document.getElementById('gi').innerText = gi.toFixed(2);
+        document.getElementById('agi').innerText = agi.toFixed(2);
+        document.getElementById('ti').innerText = ti.toFixed(2);
+        document.getElementById('ordinaryIncome').innerText = ordinaryIncome.toFixed(2);
+    }
+
+    function getStandardDeduction(filingStatus) {
+        const standardDeductionMap = {
+            'single': 13850,
+            'married': 27700,
+            'headOfHousehold': 20800,
+        };
+        return standardDeductionMap[filingStatus] || 0;
+    }
+</script>
+
+</body>
+</html>
