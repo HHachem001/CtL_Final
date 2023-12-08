@@ -7,78 +7,146 @@
     <title>IRC Code Extractor Beta</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f2f7ff;
-        color: #2a3f5f;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #99ab9e;
+            color: #2a3f5f;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
-    h1.title {
-        color: #1976D2;
-    }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
+            text-align: center;
+			border-style: outset;
+			border-width: thick;
+        }
 
-    h2.subtitle {
-        color: #455A64;
-    }
+        .hero.is-primary {
+            background-color: #004b75;
+            color: #ffffff;
+            border-style: outset;
+            border-width: 5px;
+            margin-bottom: 20px;
+        }
 
-    .hero.is-primary {
-        background-color: #004b75;
-        color: #ffffff;
-	border-style: outset;
-        border-width: 5px;
-    }
+        .subtitle {
+            margin-top: 10px;
+            color: #455A64;
+        }
 
-     .file.is-boxed .file-cta {
-        justify-content: center; /* Center the file upload button */
-        align-items: center; /* Align items vertically in the center */
-    }
+        .file-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    .file-label {
-        margin-left: 10px; /* Add some space between the icon and the label */
-    }
+        .file-input {
+            display: none;
+        }
 
-    .file-cta, .button.is-success {
-        background-color: #1976D2;
-        color: #ffffff;
-	    border-style: double;
-    border-width: 7px;
-    }
+        .file-label {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #1976D2;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
 
-    .file-name, .box.has-background-light {
-        background-color: #ffffff;
-        color: #2a3f5f;
-    }
+        .file-label:hover {
+            background-color: #15549a;
+        }
 
-    .exit-button {
-        background-color: #E57373;
-        color: #ffffff;
-	        border-style: outset;
-    border-width: 3px;
-    }
+        .file-name {
+			margin-top: 10px;
+			border-style: double;
+			border-width: medium;
+			font-style: oblique;
+			font-size: larger;
+		}
 
-    .exit-button:hover {
-        background-color: #D32F2F;
-    }
+        .analyze-button {
+            margin-top: 20px;
+            background-color: #0ca324;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .beta-disclaimer {
-        background-color: #FFC107;
-        color: #2a3f5f;
-	    border-style: outset;
-    }
+        .analyze-button:hover {
+            background-color: #0d8f21;
+        }
 
-    /* Adjust the width of the analyze button */
-    .button.is-success.is-fullwidth {
-        width: auto; /* Set width to auto */
-        max-width: 200px; /* Limit the maximum width */
-        margin: 0 auto; /* Center the button */
-    }
-</style>
+        .exit-button {
+            margin-top: 10px;
+            background-color: #E57373;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .exit-button:hover {
+            background-color: #d04747;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .not-found-message {
+            margin-top: 20px;
+            color: #757575;
+        }
+		.results-container {
+            max-height: 300px; /* Adjust the max-height as needed */
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        
+          .card {
+			margin-top: 20px;
+			padding: 20px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			border-radius: 8px;
+			background-color: #efefef;
+			text-align: left;
+			text-shadow: 0 0 black;
+			border-style: double;
+		}
+
+        .card a {
+            display: block;
+            margin-top: 10px;
+            color: #1976D2;
+            text-decoration: underline;
+        }
+		.experimental-note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #757575;
+        }
+    </style>
 </head>
 
 <body>
-    <section class="hero is-primary">
-        <div class="hero-body">
-            <div class="container has-text-centered">
+    <div class="container">
+        <section class="hero is-primary">
+            <div class="hero-body">
                 <h1 class="title">
                     IRC Code Extractor
                 </h1>
@@ -86,63 +154,49 @@
                     Extract Internal Revenue Code sections referenced in your documents.
                 </h2>
             </div>
+        </section>
+
+        <div class="file-upload-container">
+            <label class="file-label" for="fileInput">Choose a file</label>
+            <input class="file-input" type="file" id="fileInput">
+            <p class="file-name" id="fileName">No file uploaded</p>
+            <button class="analyze-button" onclick="processFile()">Analyze</button>
+            <button class="exit-button" onclick="redirectToWelcome()">Exit</button>
         </div>
-    </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-two-thirds">
-                    <div class="beta-disclaimer box has-text-centered">
-                        <p>NOTE: This feature is experimental. You may encounter errors.</p>
-                    </div>
-
-                    <div class="file has-name is-boxed">
-                        <label class="file-label">
-                            <input class="file-input" type="file" id="fileInput">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fas fa-upload"></i>
-                                </span>
-                                <span class="file-label">
-                                    Choose a file…
-                                </span>
-                            </span>
-                            <span class="file-name" id="fileName">
-                                No file uploaded
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="buttons is-centered">
-                        <button class="button is-success" onclick="processFile()">Analyze</button>
-                        <button class="button exit-button" onclick="redirectToWelcome()">Exit</button>
-                    </div>
-
-                    <div id="results" class="mt-5"></div>
-                </div>
-            </div>
+         <div class="results-container" id="resultsContainer">
+            <div id="results" class="results"></div>
         </div>
-    </section>
-</body>
 
-	
+		<p class="experimental-note">
+					Note: This feature is experimental. You may encounter errors.
+		</p>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
-
         document.getElementById('fileInput').addEventListener('change',
-function (e) {
-            const fileNameElement = document.getElementById('fileName');
-            if (this.files.length) {
-                fileNameElement.textContent = this.files[0].name;
-            } else {
-                fileNameElement.textContent = "No file uploaded";
-            }
-        });
+            function (e) {
+                const fileNameElement = document.getElementById('fileName');
+                if (this.files.length) {
+                    fileNameElement.textContent = this.files[0].name;
+                } else {
+                    fileNameElement.textContent = "No file uploaded";
+                }
+            });
+
+        function showFileUpload() {
+            const fileUploadSection = document.getElementById('fileUpload');
+            fileUploadSection.style.display = 'block';
+            setTimeout(() => {
+                fileUploadSection.classList.add('fade-in');
+            }, 10);
+        }
+
 
         async function processFile() {
             const fileInput = document.getElementById('fileInput');
@@ -240,46 +294,48 @@ function (e) {
         subtitleCategories[subtitleCategory] = (subtitleCategories[subtitleCategory] || 0) + 1;
     }
 
-    for (const subtitle in subtitleCategories) {
-        if (subtitleCategories.hasOwnProperty(subtitle)) {
-            const count = subtitleCategories[subtitle];
+          for (const subtitle in subtitleCategories) {
+                if (subtitleCategories.hasOwnProperty(subtitle)) {
+                    const count = subtitleCategories[subtitle];
 
-            const subtitleParagraph = document.createElement('div');
-            subtitleParagraph.classList.add('box', 'has-background-light');
-            subtitleParagraph.innerHTML = `<strong>Subtitle ${subtitle}</strong> (${count} occurrences)`;
+                    const card = document.createElement('div');
+                    card.classList.add('card');
 
-            resultsDiv.appendChild(subtitleParagraph);
+                    const title = document.createElement('strong');
+                    title.textContent = `Subtitle ${subtitle} (${count} occurrences)`;
 
-            for (const codeSection in codeCounts) {
-                if (codeCounts.hasOwnProperty(codeSection)) {
-                    const codeCount = codeCounts[codeSection];
+                    card.appendChild(title);
 
-                    const subtitleRange = subtitleRanges[subtitle];
-                    if (
-                        codeSection >= subtitleRange[0] &&
-                        codeSection <= subtitleRange[1]
-                    ) {
-                        const link = document.createElement('a');
-                        link.href = `https://www.law.cornell.edu/uscode/text/26/${codeSection}`;
-                        link.target = '_blank'; // Open link in a new tab
-                        link.textContent = `Found: IRC ${codeSection} (found ${codeCount} times)`;
+                    for (const codeSection in codeCounts) {
+                        if (codeCounts.hasOwnProperty(codeSection)) {
+                            const codeCount = codeCounts[codeSection];
 
-                        // Add a line break before each code section within a subtitle
-                        subtitleParagraph.appendChild(link);
-                        subtitleParagraph.appendChild(document.createElement('br'));
+                            const subtitleRange = subtitleRanges[subtitle];
+                            if (
+                                codeSection >= subtitleRange[0] &&
+                                codeSection <= subtitleRange[1]
+                            ) {
+                                const link = document.createElement('a');
+                                link.href = `https://www.law.cornell.edu/uscode/text/26/${codeSection}`;
+                                link.target = '_blank'; // Open link in a new tab
+                                link.textContent = `Found: IRC ${codeSection} (found ${codeCount} times)`;
+
+                                card.appendChild(link);
+                            }
+                        }
                     }
+
+                    resultsDiv.appendChild(card);
                 }
             }
-        }
-    }
 
-    if (!foundReferences) {
-        const notFoundParagraph = document.createElement('p');
-        notFoundParagraph.classList.add('is-size-5');
-        notFoundParagraph.textContent = "No IRS code references found in the document.";
-        resultsDiv.appendChild(notFoundParagraph);
-    }
-}
+            if (!foundReferences) {
+                const notFoundParagraph = document.createElement('p');
+                notFoundParagraph.classList.add('is-size-5');
+                notFoundParagraph.textContent = "No IRS code references found in the document.";
+                resultsDiv.appendChild(notFoundParagraph);
+            }
+        }
 
 function redirectToWelcome() {
     window.location.href = 'https://hhachem001.github.io/CtL_Final/Welcome.html';
