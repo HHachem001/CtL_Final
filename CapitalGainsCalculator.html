@@ -9,7 +9,24 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
             color: #333;
-            margin: 20px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .calculator-container {
+            width: 80%;
+            max-width: 600px; /* Adjust the maximum width as needed */
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            height: 100%;
+            box-sizing: border-box;
+			border-style: outset;
+    border-width: thick;
         }
 
         h1 {
@@ -30,25 +47,48 @@
         }
 
         button {
-            padding: 10px;
-            background-color: #4285f4;
-            color: #fff;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
+    display: block;
+    width: 150px; /* Adjust the width as needed */
+    margin: 0 auto; /* Center the button horizontally */
+    padding: 10px;
+    background-color: #4285f4;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+/* ... (your existing button styles) ... */
 
         button:hover {
             background-color: #3367d6;
         }
 
-        .results-container {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        /* Style for the popup */
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 1000;
+			    border-style: double;
+    border-width: thick;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .results-container {
+            margin-top: 20px;
         }
 
         p {
@@ -59,10 +99,29 @@
             font-weight: bold;
             color: #4285f4;
         }
+	.exit-button {
+    display: block;
+    width: 100px; /* Adjust the width as needed */
+    margin: 20px auto; /* Center the button horizontally */
+    padding: 10px;
+    background-color: #ff0000; /* Red background color */
+    color: #fff; /* White text color */
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.exit-button:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+
+
     </style>
 </head>
 <body>
-    <h1>Capital Gains Calculator</h1>
+    <div class="calculator-container">
+        <h1>Capital Gains Calculator</h1>
 
     <label for="ltcg">Long Term Capital Gain (LTCG): </label>
     <input type="number" id="ltcg">
@@ -94,18 +153,25 @@
     </select>
 
     <button onclick="calculate()">Calculate</button>
+			    <a href="https://hhachem001.github.io/CtL_Final/Welcome.html" class="exit-button" target="_blank">Exit</a>
 
-    <div class="results-container">
-        <h2>Results:</h2>
-        <p><span>Net Long Term Capital Gain (NLTCG): </span><span id="nltcg"></span></p>
-        <p><span>NSTCL or NSTCG will be displayed here: </span><span id="nstcl"></span></p>
-        <p><span>Net Gain (NG): </span><span id="ng"></span></p>
-        <p><span>Net Capital Gain (NCG): </span><span id="ncg"></span></p>
-        <p><span>Capital Loss (CL): </span><span id="cl"></span></p>
-        <p><span>Gross Income (GI): </span><span id="gi"></span></p>
-        <p><span>Adjusted Gross Income (AGI): </span><span id="agi"></span></p>
-        <p><span>Total Income (TI): </span><span id="ti"></span></p>
-        <p><span>Ordinary Income: </span><span id="ordinaryIncome"></span></p>
+    </div>
+	
+       <!-- Popup for the results -->
+    <div class="popup-container" id="popupContainer">
+        <span class="close-button" onclick="closePopup()">❌</span>
+        <div class="results-container">
+            <h2>Results:</h2>
+            <p><span>Net Long Term Capital Gain (NLTCG): </span><span id="nltcg"></span></p>
+            <p><span>NSTCL or NSTCG will be displayed here: </span><span id="nstcl"></span></p>
+            <p><span>Net Gain (NG): </span><span id="ng"></span></p>
+            <p><span>Net Capital Gain (NCG): </span><span id="ncg"></span></p>
+            <p><span>Capital Loss (CL): </span><span id="cl"></span></p>
+            <p><span>Gross Income (GI): </span><span id="gi"></span></p>
+            <p><span>Adjusted Gross Income (AGI): </span><span id="agi"></span></p>
+            <p><span>Total Income (TI): </span><span id="ti"></span></p>
+            <p><span>Ordinary Income: </span><span id="ordinaryIncome"></span></p>
+        </div>
     </div>
 
   <script>
@@ -126,7 +192,7 @@
         const gi = salary + ng;
         const agi = gi - cl;
 
-     // Display NSTCL or NSTCG based on the sign
+        // Display NSTCL or NSTCG based on the sign
         const nstclDisplayValue = Math.abs(nstcl).toFixed(2);
         const nstclDisplayText = nstcl < 0 ? `NSTCL: ${nstclDisplayValue}` : `NSTCG: ${nstclDisplayValue}`;
         
@@ -137,7 +203,7 @@
         const ordinaryIncome = ti - ncg;
 
         document.getElementById('nltcg').innerText = nltcg.toFixed(2);
-document.getElementById('nstcl').innerText = nstcl < 0 ? `NSTCL: ${nstclDisplayValue}` : `NSTCG: ${nstclDisplayValue}`;
+        document.getElementById('nstcl').innerText = nstcl < 0 ? `NSTCL: ${nstclDisplayValue}` : `NSTCG: ${nstclDisplayValue}`;
         document.getElementById('ng').innerText = ng.toFixed(2);
         document.getElementById('ncg').innerText = ncg.toFixed(2);
         document.getElementById('cl').innerText = cl.toFixed(2);
@@ -145,6 +211,14 @@ document.getElementById('nstcl').innerText = nstcl < 0 ? `NSTCL: ${nstclDisplayV
         document.getElementById('agi').innerText = agi.toFixed(2);
         document.getElementById('ti').innerText = ti.toFixed(2);
         document.getElementById('ordinaryIncome').innerText = ordinaryIncome.toFixed(2);
+
+        // Display the popup
+        document.getElementById('popupContainer').style.display = 'block';
+    }
+
+    function closePopup() {
+        // Hide the popup
+        document.getElementById('popupContainer').style.display = 'none';
     }
 
     function getStandardDeduction(filingStatus) {
@@ -156,6 +230,7 @@ document.getElementById('nstcl').innerText = nstcl < 0 ? `NSTCL: ${nstclDisplayV
         return standardDeductionMap[filingStatus] || 0;
     }
 </script>
+
 
 </body>
 </html>
