@@ -153,7 +153,7 @@
     </select>
 
     <button onclick="calculate()">Calculate</button>
-<a href="https://hhachem001.github.io/CtL_Final/Welcome.html" class="exit-button">Exit</a>
+<button onclick="redirectExit()" class="exit-button">Exit</button>
 
     </div>
 	
@@ -228,6 +228,12 @@
             'headOfHousehold': 20800,
         };
         return standardDeductionMap[filingStatus] || 0;
+    }
+</script>
+
+	<script>
+    function redirectExit() {
+        window.location.href = 'https://hhachem001.github.io/CtL_Final/Welcome.html';
     }
 </script>
 
