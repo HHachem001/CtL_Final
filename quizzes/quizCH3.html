@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH3 Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +42,7 @@
 <body>
 <div class="chat-container">
     <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+        <p>Welcome to the Chapter 3 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -71,15 +71,46 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "At the Heads Eye Casino in Vegas, Lucky Louie gives the maitre d’ a $50 dollar tip to assure a good table, and gives the croupier a $50 “toke” after a good night with the cubes.  Does either the maitre d’ or the croupier have gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "Employer gives all of her employees, except her son, a black and white television set at Christmas, worth $100.  She gives Son, who also is an employee, a color television set worth $500.  Does Son have gross income?",
+            answers: ["Yes, $600 Gross Income", "Yes, $100 Gross Income, $400 Gift", "No", "None of the above."],
+            correctAnswer: "Yes, $100 Gross Income, $400 Gift"
+        },
+        {
+            question: "The congregation for whom Reverend serves as a minister gives her a check for $5,000 on her retirement.  Does Reverend have gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Retiree receives a $5,000 trip on his retirement.  To pay for the cost of the trip, Employer contributed $2,000, and fellow employees of Retiree contributed $3,000.  Does Retiree have gross income?",
+            answers: ["Yes, $5000 in Gross Income", "Yes, $2000 Gross Income and Gift of $3000", "Maybe", "No"],
+            correctAnswer: "Yes, $2000 Gross Income and Gift of $3000"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father leaves Daughter $20,000 in his will.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father dies intestate and Daughter receives $20,000 worth of real estate as his heir.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father leaves Daughter $20,000 in his will stating that the amount is in appreciation of Daughter’s long and devoted service to him.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father appointed Daughter executrix of his estate and Father's will provided Daughter was to receive $20,000 for services as executrix.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+        
     ];
 
     function showMessage(message, isUser = false) {
@@ -100,7 +131,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +159,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -153,30 +186,39 @@
         showMessage("Click 'Start' to begin.", false);
     });
 
-    generatePDFButton.addEventListener('click', () => {
-    if (typeof jsPDF !== 'undefined') {
-        const doc = new jsPDF();
-        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+   generatePDFButton.addEventListener('click', () => {
+        if (typeof jsPDF !== 'undefined') {
+            const doc = new jsPDF();
 
-        let yPos = 40;
-        questions.forEach((question, index) => {
-            const questionText = `${index + 1}. ${question.question}`;
-            const answerText = `Correct Answer: ${question.correctAnswer}`;
-            doc.setFontSize(12);
-            doc.text(20, yPos, questionText);
-            doc.setFontSize(10);
-            doc.text(20, yPos + 10, answerText);
-            yPos += 30;
-        }); // Close the forEach function here
+            doc.text(20, 20, 'Chapter 2 Quiz Questions and Answers');
 
-        const pdfDataUri = doc.output('datauristring');
-        const blob = dataURItoBlob(pdfDataUri);
+            let yPos = 40;
+            questions.forEach((question, index) => {
+                const questionText = `${index + 1}. ${question.question}`;
+                const answerText = `Correct Answer: ${question.correctAnswer}`;
 
-        saveAs(blob, 'Professional_Quiz.pdf');
-    } else {
-        showMessage("Error: The PDF library is not available.");
-    }
-});
+                // Set width for the text area
+                const textWidth = 170; // Adjust the width as needed
+
+                // Split text to size for proper wrapping
+                const splitQuestionText = doc.splitTextToSize(questionText, textWidth);
+                const splitAnswerText = doc.splitTextToSize(answerText, textWidth);
+
+                // Use the 'options' parameter for text method to control text wrapping
+                doc.text(splitQuestionText, 20, yPos);
+                doc.text(splitAnswerText, 20, yPos + doc.getTextDimensions(splitQuestionText).h);
+
+                yPos += doc.getTextDimensions(splitQuestionText + splitAnswerText).h + 10; // Adjust the line spacing as needed
+            });
+
+            const pdfDataUri = doc.output('datauristring');
+            const blob = dataURItoBlob(pdfDataUri);
+
+            saveAs(blob, 'Chapter_3_Quiz.pdf');
+        } else {
+            showMessage("Error: The PDF library is not available.");
+        }
+    });
 
     function dataURItoBlob(dataURI) {
         const byteString = atob(dataURI.split(',')[1]);
