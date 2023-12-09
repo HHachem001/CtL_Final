@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+			font-style: italic;
+        }
+
+        h2 {
+            color: #fff;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        .chapter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .chapter {
+            padding: 20px;
+            background-color: #004b75;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 200px;
+			border-style: groove;
+			border-width: thick;
+        }
+
+        .chapter:hover {
+            background-color: #336ca7;
+        }
+
+        .chapter-description {
+            font-size: 14px;
+            margin-top: 5px;
+            color: #777;
+            display: none;
+			color: #fff;
+        }
+
+        .chapter:hover .chapter-description {
+            display: block;
+        }
+		.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
+    </style>
+</head>
+<body>
+
+ <a href="https://hhachem001.github.io/CtL_Final/Welcome.html" class="exit-button">Exit</a>
+
+    <h1>Select a chapter to begin:</h1>
+
+    <div class="chapter-container">
+        <div class="chapter" id="chapter2">
+            <h2>Chapter 2</h2>
+            <p>Gross Income: The Scope of Section 61</p>
+            <div class="chapter-description">
+                <p>Defines gross income and includes income from any source. Examines what constitutes income and the parameters of section 61.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter3">
+            <h2>Chapter 3</h2>
+            <p>The Exclusion of Gifts and Inheritances</p>
+            <div class="chapter-description">
+                <p>Examines section 102, the provision excluding gifts, bequests, devises, and inheritances. Explores issues associated with these exclusions.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter4">
+            <h2>Chapter 4</h2>
+            <p>Employee Benefits</p>
+            <div class="chapter-description">
+                <p>Section 61 provides that compensation derived from the performance of services is included in gross income. Examines various fringe benefits and their tax treatment.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter5">
+            <h2>Chapter 5</h2>
+            <p>Awards</p>
+            <div class="chapter-description">
+                <p>The code provides that the value of prizes and awards constitute gross income. Explores the tax treatment of awards, scholarships, and related issues.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter6">
+            <h2>Chapter 6</h2>
+            <p>Gain from Dealings in Property</p>
+            <div class="chapter-description">
+                <p>Examines income tax consequences of property dispositions. Covers calculation of gain, determination of property basis, and related issues.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter7">
+            <h2>Chapter 7</h2>
+            <p>Life Insurance Proceeds and Annuities</p>
+            <div class="chapter-description">
+                <p>Considers the income tax treatment of life insurance proceeds and payments received under an annuity contract.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter8">
+            <h2>Chapter 8</h2>
+            <p>Discharge of Indebtedness</p>
+            <div class="chapter-description">
+                <p>Explores the tax treatment of cancelled loans and exceptions to the general rule that loan proceeds are not included in gross income.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter9">
+            <h2>Chapter 9</h2>
+            <p>Damages and Related Receipts</p>
+            <div class="chapter-description">
+                <p>Examines the federal income tax treatment of damages received in legal actions, focusing on personal physical injury and other recoveries for injuries and sickness.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter10">
+            <h2>Chapter 10</h2>
+            <p>Separation and Divorce</p>
+            <div class="chapter-description">
+                <p>Explores federal income tax consequences resulting from divorce, covering alimony, property settlements, and child support.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter11">
+            <h2>Chapter 11</h2>
+            <p>Other Exclusions from Gross Income</p>
+            <div class="chapter-description">
+                <p>Discusses additional exclusions available for gain resulting from the sale of a principal residence, income earned by a U.S. citizen or resident working in a foreign country, and interest received from a municipal bond.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter12">
+            <h2>Chapter 12</h2>
+            <p>Assignment of Income</p>
+            <div class="chapter-description">
+                <p>Addresses issues related to assigning income from performing services or deriving income from property to a third person.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter14">
+            <h2>Chapter 14</h2>
+            <p>Business Deductions</p>
+            <div class="chapter-description">
+                <p>Focuses on deductions for ordinary and necessary business expenses, depreciation, and business losses. Examines various provisions and issues affecting these deductions.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter15">
+            <h2>Chapter 15</h2>
+            <p>Deductions for Profit-Making, Nonbusiness Activities</p>
+            <div class="chapter-description">
+                <p>Concerns deductions allowable for investment and income-producing activities. Explores tax issues associated with such activities.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter16">
+            <h2>Chapter 16</h2>
+            <p>Deductions Not Limited to Business or Profit-Seeking Activities</p>
+            <div class="chapter-description">
+                <p>Examines issues related to the deduction allowable for qualified residence interest, specifically, interest on a home mortgage.</p>
+            </div>
+        </div>
+
+        <div class="chapter" id="chapter21">
+            <h2>Chapter 21</h2>
+            <p>Capital Gains and Losses</p>
+            <div class="chapter-description">
+                <p>Covers the tax treatment of capital gains and losses, including rates, mechanical rules, capital loss carryovers, holding period, and types of property defined as capital assets.</p>
+            </div>
+        </div>
+
+    </div>
+	
+	    <script>
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+
+</body>
+</html>
