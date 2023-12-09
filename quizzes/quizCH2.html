@@ -190,7 +190,7 @@
         if (typeof jsPDF !== 'undefined') {
             const doc = new jsPDF();
 
-            doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+            doc.text(20, 20, 'Chapter 2 Quiz Questions and Answers');
 
             let yPos = 40;
             questions.forEach((question, index) => {
@@ -198,19 +198,19 @@
                 const answerText = `Correct Answer: ${question.correctAnswer}`;
                 
                 // Set width for the text area
-                const textWidth = 150;
+                const textWidth = 170; // Adjust the width as needed
                 
                 // Use the 'options' parameter for text method to control text wrapping
                 doc.text(questionText, 20, yPos, { width: textWidth });
-                doc.text(answerText, 20, yPos + 10, { width: textWidth });
+                doc.text(answerText, 20, yPos + 20, { width: textWidth });
                 
-                yPos += 30;
+                yPos += 40; // Adjust the line spacing as needed
             });
 
             const pdfDataUri = doc.output('datauristring');
             const blob = dataURItoBlob(pdfDataUri);
 
-            saveAs(blob, 'Professional_Quiz.pdf');
+            saveAs(blob, 'Chapter_2_Quiz.pdf');
         } else {
             showMessage("Error: The PDF library is not available.");
         }
