@@ -186,30 +186,35 @@
         showMessage("Click 'Start' to begin.", false);
     });
 
-    generatePDFButton.addEventListener('click', () => {
-    if (typeof jsPDF !== 'undefined') {
-        const doc = new jsPDF();
-        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+   generatePDFButton.addEventListener('click', () => {
+        if (typeof jsPDF !== 'undefined') {
+            const doc = new jsPDF();
 
-        let yPos = 40;
-        questions.forEach((question, index) => {
-            const questionText = `${index + 1}. ${question.question}`;
-            const answerText = `Correct Answer: ${question.correctAnswer}`;
-            doc.setFontSize(12);
-            doc.text(20, yPos, questionText);
-            doc.setFontSize(10);
-            doc.text(20, yPos + 10, answerText);
-            yPos += 30;
-        }); // Close the forEach function here
+            doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
 
-        const pdfDataUri = doc.output('datauristring');
-        const blob = dataURItoBlob(pdfDataUri);
+            let yPos = 40;
+            questions.forEach((question, index) => {
+                const questionText = `${index + 1}. ${question.question}`;
+                const answerText = `Correct Answer: ${question.correctAnswer}`;
+                
+                // Set width for the text area
+                const textWidth = 150;
+                
+                // Use the 'options' parameter for text method to control text wrapping
+                doc.text(questionText, 20, yPos, { width: textWidth });
+                doc.text(answerText, 20, yPos + 10, { width: textWidth });
+                
+                yPos += 30;
+            });
 
-        saveAs(blob, 'Professional_Quiz.pdf');
-    } else {
-        showMessage("Error: The PDF library is not available.");
-    }
-});
+            const pdfDataUri = doc.output('datauristring');
+            const blob = dataURItoBlob(pdfDataUri);
+
+            saveAs(blob, 'Professional_Quiz.pdf');
+        } else {
+            showMessage("Error: The PDF library is not available.");
+        }
+    });
 
     function dataURItoBlob(dataURI) {
         const byteString = atob(dataURI.split(',')[1]);
