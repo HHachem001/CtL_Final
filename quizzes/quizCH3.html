@@ -113,7 +113,7 @@
         
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -186,39 +186,30 @@
         showMessage("Click 'Start' to begin.", false);
     });
 
-   generatePDFButton.addEventListener('click', () => {
-        if (typeof jsPDF !== 'undefined') {
-            const doc = new jsPDF();
+    generatePDFButton.addEventListener('click', () => {
+    if (typeof jsPDF !== 'undefined') {
+        const doc = new jsPDF();
+        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
 
-            doc.text(20, 20, 'Chapter 2 Quiz Questions and Answers');
+        let yPos = 40;
+        questions.forEach((question, index) => {
+            const questionText = `${index + 1}. ${question.question}`;
+            const answerText = `Correct Answer: ${question.correctAnswer}`;
+            doc.setFontSize(12);
+            doc.text(20, yPos, questionText);
+            doc.setFontSize(10);
+            doc.text(20, yPos + 10, answerText);
+            yPos += 30;
+        }); // Close the forEach function here
 
-            let yPos = 40;
-            questions.forEach((question, index) => {
-                const questionText = `${index + 1}. ${question.question}`;
-                const answerText = `Correct Answer: ${question.correctAnswer}`;
+        const pdfDataUri = doc.output('datauristring');
+        const blob = dataURItoBlob(pdfDataUri);
 
-                // Set width for the text area
-                const textWidth = 170; // Adjust the width as needed
-
-                // Split text to size for proper wrapping
-                const splitQuestionText = doc.splitTextToSize(questionText, textWidth);
-                const splitAnswerText = doc.splitTextToSize(answerText, textWidth);
-
-                // Use the 'options' parameter for text method to control text wrapping
-                doc.text(splitQuestionText, 20, yPos);
-                doc.text(splitAnswerText, 20, yPos + doc.getTextDimensions(splitQuestionText).h);
-
-                yPos += doc.getTextDimensions(splitQuestionText + splitAnswerText).h + 10; // Adjust the line spacing as needed
-            });
-
-            const pdfDataUri = doc.output('datauristring');
-            const blob = dataURItoBlob(pdfDataUri);
-
-            saveAs(blob, 'Chapter_3_Quiz.pdf');
-        } else {
-            showMessage("Error: The PDF library is not available.");
-        }
-    });
+        saveAs(blob, 'Chapter_3_Quiz.pdf');
+    } else {
+        showMessage("Error: The PDF library is not available.");
+    }
+});
 
     function dataURItoBlob(dataURI) {
         const byteString = atob(dataURI.split(',')[1]);
