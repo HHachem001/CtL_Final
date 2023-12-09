@@ -196,15 +196,19 @@
             questions.forEach((question, index) => {
                 const questionText = `${index + 1}. ${question.question}`;
                 const answerText = `Correct Answer: ${question.correctAnswer}`;
-                
+
                 // Set width for the text area
                 const textWidth = 170; // Adjust the width as needed
-                
+
+                // Split text to size for proper wrapping
+                const splitQuestionText = doc.splitTextToSize(questionText, textWidth);
+                const splitAnswerText = doc.splitTextToSize(answerText, textWidth);
+
                 // Use the 'options' parameter for text method to control text wrapping
-                doc.text(questionText, 20, yPos, { width: textWidth });
-                doc.text(answerText, 20, yPos + 20, { width: textWidth });
-                
-                yPos += 40; // Adjust the line spacing as needed
+                doc.text(splitQuestionText, 20, yPos);
+                doc.text(splitAnswerText, 20, yPos + doc.getTextDimensions(splitQuestionText).h);
+
+                yPos += doc.getTextDimensions(splitQuestionText + splitAnswerText).h + 10; // Adjust the line spacing as needed
             });
 
             const pdfDataUri = doc.output('datauristring');
