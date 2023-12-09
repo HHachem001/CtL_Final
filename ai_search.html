@@ -238,7 +238,7 @@ body::before {
 
                 // Check if the fallback context is not related to taxes, and if so, set a tax-related context
                 if (!fallbackOutput[0].generated_text.toLowerCase().includes('tax')) {
-                    fallbackOutput = await generator(question + ' related to taxes', { max_new_tokens: 100 });
+                    fallbackOutput = await generator(question + ' as it relates to taxes', { max_new_tokens: 100 });
                 }
 
                 output.innerHTML = `Answer: ${fallbackOutput[0].generated_text}<br>Confidence Score: Low (Fallback Mode)`;
