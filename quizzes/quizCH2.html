@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH2 Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +42,7 @@
 <body>
 <div class="chat-container">
     <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+        <p>Welcome to the Chaoter 2 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -71,15 +71,46 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Winner attends the opening of a new department store. All persons attending are given free raffle tickets for a watch worth $200. Disregarding any possible application of I.R.C. § 74, must Winner include anything within gross income when she wins the watch in the raffle?",
+            answers: ["No", "Yes", "depends", "perhaps"],
+            correctAnswer: "Yes"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "Employee has worked for Employer’s incorporated business for several years at a salary of $40,000 per year.  Another company is attempting to hire Employee but Employer persuades Employee to stay for at least two more years by giving Employee 2% of the company’s stock, which is worth $20,000, and by buying Employee’s spouse a new car worth $15,000.  How much income does Employee realize from these transactions?",
+            answers: ["$15,000", "$80,000", "$75,000", "$40,000"],
+            correctAnswer: "$75,000"
+        },
+        {
+            question: "Owner agrees to rent Tenant her lake house for the summer for $4,000. How much income does Owner realize if she agrees to charge only $1,000 if Tenant makes $3,000 worth of improvements to the house?",
+            answers: ["$4000", "$1000", "$3000", "$5000"],
+            correctAnswer: "$4000"
+        },
+        {
+            question: "Flyer receives the mileage credits as a part of a purchase of ticket for a personal trip.  The credits are assignable. Does Flyer have gross income?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy and her family consume $100 worth of vegetables?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy sells vegetables for $100?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy exchanges $100 worth of vegetables with Charlie for $100 worth of tuna which Charlie caught?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: " Doctor needs to have his income tax return prepared.  Lawyer would like a general physical check up.  Doctor would normally charge $200 for the physical and Lawyer would normally charge $200 for the income tax return preparation.What tax consequences to each if they simply swap services without any money changing hands?",
+            answers: ["$200", "$0", "$400", "Depends"],
+            correctAnswer: "$200"
+        },
+        
     ];
 
     function showMessage(message, isUser = false) {
