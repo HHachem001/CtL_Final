@@ -137,7 +137,8 @@ body::before {
         <div id="chat-messages"></div>
         <div id="user-input">
             <input type="text" id="input-text" placeholder="Type here...">
-            <button id="send-btn" onclick="sendMessage()">Send</button>
+            <!-- Keep the onclick attribute as "sendMessage" -->
+		<button id="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -147,7 +148,12 @@ body::before {
 function startChat() {
     appendMessage('Bot', 'Hello! I can assist with very basic questions. What would you like to know about? Please type your question.');
 }
-
+function sendMessage() {
+    const userMessage = inputField.value;
+    appendMessage('User', userMessage);
+    handleUserInput(userMessage);
+    inputField.value = '';
+}
 // Main user input handling function
 function handleUserInput(input) {
     const normalizedInput = input.trim().toLowerCase();
