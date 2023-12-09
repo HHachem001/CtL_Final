@@ -30,7 +30,7 @@ body::before {
         #chat-container {
             width: 400px;
             background-color: #fff;
-			box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Adjust the values for intensity */
+	      box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
             border-radius: 5px;
             overflow: hidden;
             position: relative;
@@ -56,7 +56,12 @@ body::before {
             padding: 8px;
             cursor: pointer;
             border-radius: 3px;
+	    border-style: inset;
         }
+
+	    #exit-btn: hover {
+		    color: #bd3123
+	    }
 
         #chat-messages {
             padding: 20px;
