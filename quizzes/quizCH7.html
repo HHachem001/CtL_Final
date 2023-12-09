@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Income Tax Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .chat-container {
+            width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .message {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+        }
+        .answer-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #a1d5e2;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .status-message {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="message bot-message">
+        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    </div>
+    <button id="start-button" class="answer-button">Start</button>
+    <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
+    <div id="quiz-container" style="display: none;">
+        <div id="question-container"></div>
+        <div id="answers-container"></div>
+        <div id="status-container"></div>
+        <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+    </div>
+</div>
+<script src="jspdf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+    const chatContainer = document.querySelector('.chat-container');
+    const startButton = document.getElementById('start-button');
+    const startOverButton = document.getElementById('start-over-button');
+    const generatePDFButton = document.getElementById('generate-pdf-button');
+    const quizContainer = document.getElementById('quiz-container');
+    const questionContainer = document.getElementById('question-container');
+    const answersContainer = document.getElementById('answers-container');
+    const statusContainer = document.getElementById('status-container');
+
+    let currentQuestionIndex = -1;
+    let totalScore = 0;
+
+    const questions = [
+        {
+            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
+            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
+            correctAnswer: "No, losses from gambling are not deductible"
+        },
+        {
+            question: "What does IRC mean?",
+            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
+            correctAnswer: "Internal Revenue Code"
+        }
+    ];
+
+    function showMessage(message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        messageDiv.innerHTML = `<p>${message}</p>`;
+        chatContainer.appendChild(messageDiv);
+    }
+
+    function showAnswers(question) {
+        answersContainer.innerHTML = '';
+        question.answers.forEach((answer, index) => {
+            const answerButton = document.createElement('button');
+            answerButton.className = 'answer-button';
+            answerButton.textContent = answer;
+            answerButton.addEventListener('click', () => handleUserInput(answer));
+            answersContainer.appendChild(answerButton);
+        });
+    }
+
+    function handleUserInput(userAnswer) {
+        if (currentQuestionIndex >= 0) {
+            const currentQuestion = questions[currentQuestionIndex];
+            answersContainer.innerHTML = '';
+            if (userAnswer.toLowerCase() === currentQuestion.correctAnswer.toLowerCase()) {
+                totalScore++;
+                showStatus("Correct answer!");
+            } else {
+                showStatus("Incorrect answer.");
+            }
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(questions[currentQuestionIndex]);
+        } else {
+            showStatus(`Quiz completed. Your score: ${totalScore} out of ${questions.length}`);
+            startButton.style.display = 'none';
+            startOverButton.style.display = 'block';
+            generatePDFButton.style.display = 'block';
+        }
+    }
+
+    function showQuestion(question) {
+        questionContainer.innerHTML = question.question;
+        showAnswers(question);
+    }
+
+    function showStatus(status) {
+        const statusMessage = document.createElement('div');
+        statusMessage.className = 'status-message';
+        statusMessage.textContent = status;
+        statusContainer.appendChild(statusMessage);
+    }
+
+    startButton.addEventListener('click', () => {
+        startButton.style.display = 'none';
+        currentQuestionIndex = 0;
+        chatContainer.removeChild(chatContainer.lastChild);
+        quizContainer.style.display = 'block';
+        showQuestion(questions[currentQuestionIndex]);
+    });
+
+    startOverButton.addEventListener('click', () => {
+        startOverButton.style.display = 'none';
+        generatePDFButton.style.display = 'none';
+        startButton.style.display = 'block';
+        quizContainer.style.display = 'none';
+        questionContainer.innerHTML = '';
+        statusContainer.innerHTML = '';
+        totalScore = 0;
+        showMessage("Click 'Start' to begin.", false);
+    });
+
+    generatePDFButton.addEventListener('click', () => {
+    if (typeof jsPDF !== 'undefined') {
+        const doc = new jsPDF();
+        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+
+        let yPos = 40;
+        questions.forEach((question, index) => {
+            const questionText = `${index + 1}. ${question.question}`;
+            const answerText = `Correct Answer: ${question.correctAnswer}`;
+            doc.setFontSize(12);
+            doc.text(20, yPos, questionText);
+            doc.setFontSize(10);
+            doc.text(20, yPos + 10, answerText);
+            yPos += 30;
+        }); // Close the forEach function here
+
+        const pdfDataUri = doc.output('datauristring');
+        const blob = dataURItoBlob(pdfDataUri);
+
+        saveAs(blob, 'Professional_Quiz.pdf');
+    } else {
+        showMessage("Error: The PDF library is not available.");
+    }
+});
+
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    }
+</script>
+</body>
+</html>
