@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH8 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 8 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,38 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a settlement of $7,000 of cash?",
+            answers: ["No Gross Income", "Gross Income of $3000", "Gross Income of $10000", "Depends"],
+            correctAnswer: "Gross Income of $3000"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a painting with basis and fair market value of $8,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$2000 Gross Income"
+        },
+       {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a painting with a value of $8000 and a basis of $5,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$2000 Gross Income"
+        },
+        {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with services, in the form of remodeling Rich’s office, which are worth $10,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "Mortgagor purchases a parcel of land held for investment from Seller for $100,000 with $20,000 of cash paid directly by Mortgagor and $80,000 paid from the proceeds of a recourse mortgage incurred from Bank.  Mortgagor is personally liable for the loan and the land is security for the loan.  When the land increases in value to $300,000, Mortgagor borrows another $100,000 from Bank again incurring personal liability and again with the land as security.  Mortgagor uses the $100,000 of loan proceeds to purchase stocks and bonds.  Several years later when the principal amount of the mortgages is still $180,000, the land declines in value to $170,000, Mortgagor transfers the land to the Bank, and the Bank discharges all of the Mortgagor’s indebtedness. What are the tax consequences to Mortgagor? ",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "Student received a $20,000 loan from Law School to be used for the payment of tuition and books. What results if the loan is forgiven by the school in 2022",
+            answers: ["$2000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "No Gross Income"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +139,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +167,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +213,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_8_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
