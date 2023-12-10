@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .chat-container {
+            width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+        }
+        .message {
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
+        }
+        .user-message {
+            text-align: right;
+        }
+        .answer-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #a1d5e2;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+			    border-style: groove;
+        }
+        .status-message {
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
+        }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+			    border-style: double;
+
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="message bot-message">         
+        <p>Welcome to the Cumulative Exam! Click 'Start' to begin.</p>
+    </div>
+    <button id="start-button" class="answer-button">Start</button>
+    <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
+    <div id="quiz-container" style="display: none;">
+        <div id="question-container"></div>
+        <div id="answers-container"></div>
+        <div id="status-container"></div>
+        <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/Welcome.html" class="exit-button">Exit</a>
+    </div>
+</div>
+<script src="jspdf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+    const chatContainer = document.querySelector('.chat-container');
+    const startButton = document.getElementById('start-button');
+    const startOverButton = document.getElementById('start-over-button');
+    const generatePDFButton = document.getElementById('generate-pdf-button');
+    const quizContainer = document.getElementById('quiz-container');
+    const questionContainer = document.getElementById('question-container');
+    const answersContainer = document.getElementById('answers-container');
+    const statusContainer = document.getElementById('status-container');
+
+    let currentQuestionIndex = -1;
+    let totalScore = 0;
+
+    const questions = [
+        {
+            question: "Winner attends the opening of a new department store. All persons attending are given free raffle tickets for a watch worth $200. Disregarding any possible application of I.R.C. § 74, must Winner include anything within gross income when she wins the watch in the raffle?",
+            answers: ["No", "Yes", "depends", "perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Employee has worked for Employer’s incorporated business for several years at a salary of $40,000 per year.  Another company is attempting to hire Employee but Employer persuades Employee to stay for at least two more years by giving Employee 2% of the company’s stock, which is worth $20,000, and by buying Employee’s spouse a new car worth $15,000.  How much income does Employee realize from these transactions?",
+            answers: ["$15,000", "$80,000", "$75,000", "$40,000"],
+            correctAnswer: "$75,000"
+        },
+        {
+            question: "Owner agrees to rent Tenant her lake house for the summer for $4,000. How much income does Owner realize if she agrees to charge only $1,000 if Tenant makes $3,000 worth of improvements to the house?",
+            answers: ["$4000", "$1000", "$3000", "$5000"],
+            correctAnswer: "$4000"
+        },
+        {
+            question: "Flyer receives the mileage credits as a part of a purchase of ticket for a personal trip.  The credits are assignable. Does Flyer have gross income?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy and her family consume $100 worth of vegetables?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy sells vegetables for $100?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Vegy grows vegetables in her garden.  Does Vegy have gross income when Vegy exchanges $100 worth of vegetables with Charlie for $100 worth of tuna which Charlie caught?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: " Doctor needs to have his income tax return prepared.  Lawyer would like a general physical check up.  Doctor would normally charge $200 for the physical and Lawyer would normally charge $200 for the income tax return preparation.What tax consequences to each if they simply swap services without any money changing hands?",
+            answers: ["$200", "$0", "$400", "Depends"],
+            correctAnswer: "$200"
+        },
+		 {
+            question: "At the Heads Eye Casino in Vegas, Lucky Louie gives the maitre d’ a $50 dollar tip to assure a good table, and gives the croupier a $50 “toke” after a good night with the cubes.  Does either the maitre d’ or the croupier have gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Employer gives all of her employees, except her son, a black and white television set at Christmas, worth $100.  She gives Son, who also is an employee, a color television set worth $500.  Does Son have gross income?",
+            answers: ["Yes, $600 Gross Income", "Yes, $100 Gross Income, $400 Gift", "No", "None of the above."],
+            correctAnswer: "Yes, $100 Gross Income, $400 Gift"
+        },
+        {
+            question: "The congregation for whom Reverend serves as a minister gives her a check for $5,000 on her retirement.  Does Reverend have gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Retiree receives a $5,000 trip on his retirement.  To pay for the cost of the trip, Employer contributed $2,000, and fellow employees of Retiree contributed $3,000.  Does Retiree have gross income?",
+            answers: ["Yes, $5000 in Gross Income", "Yes, $2000 Gross Income and Gift of $3000", "Maybe", "No"],
+            correctAnswer: "Yes, $2000 Gross Income and Gift of $3000"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father leaves Daughter $20,000 in his will.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father dies intestate and Daughter receives $20,000 worth of real estate as his heir.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father leaves Daughter $20,000 in his will stating that the amount is in appreciation of Daughter’s long and devoted service to him.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Consider whether it is likely that § 102 applies in the following circumstances: Father appointed Daughter executrix of his estate and Father's will provided Daughter was to receive $20,000 for services as executrix.",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable"
+        },
+         {
+            question: "Employee of a national hotel chain stays in one of the chain’s hotels in another town rent-free while on vacation.  The hotel has several empty rooms. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "The desk clerk bounces a paying guest so Employee can stay rent-free. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Employee pays the bill and receives a cash rebate from the chain. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "E is an officer in the hotel chain and rent-free use is provided only to officers and all other employees pay 60% of the normal rent.Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
+        },
+        {
+            question: " Employee sells insurance and employer Insurance Company allows Employee 20% off the $1,000 cost of the policy.Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes, the entire amount", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Yes, but only the max 20% discount"
+        },
+        {
+            question: " Employee is a salesman in a home electronics appliance store.  The prior year the store had $1,000,000 in sales and a $600,000 cost of goods sold.  Employee buys a $2,000 video cassette recorder from Employer for $1,000. Can this fringe benefit be excluded from gross income?",
+            answers: ["Yes, the entire amount", "Yes, but only $800", "Maybe", "Depends"],
+            correctAnswer: "Yes, but only $800"
+        },
+        {
+            question: "Employee attends a business convention in another town.  Employer picks up Employee’s costs. Can this fringe benefit be excluded from gross income?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if the nature of Employee’s work does not require Employee to live on the premise as a condition of employment?",
+            answers: ["Excludable", "Not Excludable, and GI of $9000", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable, and GI of $9000"
+        },
+         {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if Employer and Employee simply agreed to a clause in the employment contract requiring Employee to live in the residence?",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if Employee’s work and contract require Employee to live on the premises and Employer furnishes Employee and family $3,000 worth of groceries during the year?",
+            answers: ["$3000 is Excludable", "$3000 is Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "$3000 is Not Excludable"
+        },
+		  {
+            question: "Each year, national sportswriters get together and select the single most outstanding amateur athlete in the country and award that person a check for $5,000. Michael, a talented swimmer, has been selected for this year’s award. The ward is given with the stipulation that the winner deliver a 15-minute “acceptance speech” at an awards banquet. Michael, essentially delivering an acceptable rejection “acceptance speech,” designates the award to the Paralympic Games, a charity under §170, to receive the award. The sportswriters send the check to the Paralympic Games. Will Michael be able to exclude the $5,000 from his gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
+        },
+        {
+            question: "What result if Michael receives the $5,000 check from the U.S. Olympic Committee for his performance at the Olympics and deposits the check?",
+            answers: ["Excludable", "Not Excludable", "Depends", "Perhaps"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Student working toward an A.B. degree is awarded a $15,000 for full tuition and for room and board during the academic year. $10,000 for tuition and books, and $5,000 for room and board. As a scholarship recipient, student is required to do about 300 hours of research for the professor to whom he is assigned. Non-scholarship students, if hired are paid $10/hr for such work. What is the tax consequence to student?",
+            answers: ["No Tax Consequence", "Gross Income of $8000", "Gross Income of $5000", "Gross Income of $3000"],
+            correctAnswer: "Gross Income of $8000"
+        },
+        {
+            question: "What tax consequences to Student if all students are required to do 300 hours of research or faculty?",
+            answers: ["Included in GI", "Excluded from GI", "Depends", "Perhaps"],
+            correctAnswer: "Included in GI"
+        },
+        {
+            question: "What result if Student is not required to do any research but receives the $15,000 as an athletic Scholarship?",
+            answers: ["The entire amount is excluded", "Only $10,000 is excluded", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Only $10,000 is excluded"
+        },
+        {
+            question: "Secretary, in a large tax law firm, receives $10,000 stipend from her firm to assist her while on leave of absence to obtain a college degree. The stipend is part of a firm plan under which al recipients are required to return to the firm following their educational leave. What are the tax consequences to the secretary?",
+            answers: ["The entire amount is excluded", "Yes, but only the first $5250", "Maybe", "Depends"],
+            correctAnswer: "Yes, but only the first $5250"
+        },
+        {
+            question: "What tax consequences to Secretary if she is not required to return to the firm after completing her degree?",
+            answers: ["Excludable Prop. under Reg §1.117-6(d)(2) because the $ represents compensation for past, present, or future services.", "No Exclusion Prop. Reg §1.117-6(d)(2) because the $ does not represent compensation for past, present, or future services.", "Maybe", "Depends"],
+            correctAnswer: "Excludable Prop. under Reg §1.117-6(d)(2) because the $ represents compensation for past, present, or future services."
+        },
+		  {
+            question: "Owner purchases some land for $10,000 and later sells it for $16,000. Determine the amount of Owner's gain on the sale.",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+       {
+            question: "What difference in result in (a), above, if Owner purchased the land by paying $1,000 for an option to purchase the land for an additional $9,000 and subsequently exercised the option?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+         {
+            question: "What result to Owner in (b), above, if rather than ever actually acquiring th eland Owner sold the option to Investor for $1,500?",
+            answers: ["$15000 Gain", "$1000 gain", "No Gain", "$500 gain"],
+            correctAnswer: "$500 gain"
+        },
+        {
+            question: "What difference in result in (a) above, if Owner purchased the land by making a $2,000 cash payment from Owner’s funds and an $8,000 payment by borrowing $8,000 from the bank in a recourse mortgage (on which Owner is personably liable)?  Would it make any difference if the mortgage was a non-recourse liability (on which only the land was security for the obligation)?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+        {
+            question: "What result in (a), above, if Owner purchased the land for $10,000, spent $2,000 in clearing the land prior to its sale, and sold it for $18,000?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+        {
+            question: "Donor gave Donee property under circumstances that required no payment of gift tax.  What gain or loss to Donee on the subsequent sale of the property if: The property had cost Donor $20,000, had a $30,000 fair market value at the time of the gift, and Donee sold it for: (1) $35,000? (2) $15,000 (3) $25,000",
+            answers: ["(1) $15000 gain (2) $5000 loss (3) $5000 gain ", "(1) $15000 loss (2) $5000 gain (3) $5000 gain ", "No Gain", "None of the Above"],
+            correctAnswer: "(1) $15000 gain (2) $5000 loss (3) $5000 gain "
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value.What are the income tax consequences to Andre?",
+            answers: ["$0 Gain Recognized, $30,000 Gain Realized", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$0 Gain Recognized, $30,000 Gain Realized"
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value. What is Steffi's basis in the property?",
+            answers: ["$40,000", "$70,000", "No basis", "$10,000"],
+            correctAnswer: "$40,000"
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value. What gain to Steffi if she immediately resells the property?",
+            answers: ["$40,000", "$30,000", "No gain", "$70,000"],
+            correctAnswer: "$30,000"
+        },
+        {
+            question: "In the current year, Giver holds two blocks of identical stock, both worth $1,000,000. Giver purchased the first block years ago for $50,000 and the second block more recently for $950,000. Giver plans to make an inter vivos gift of one block and retain the second until death. Which block of stock should Giver transfer inter vivos and why?",
+            answers: ["$950,000 block inter vivos & the $50,000 block at death", "$50,000 Now", "Nothing", "$70,000"],
+            correctAnswer: "$950,000 block inter vivos & the $50,000 block at death"
+        },
+        {
+            question: "Mortgagor purchases a parcel of land from Seller for $100,000. Mortgagor borrows $80,000 from bank and pays that amount and an additional $20,000 of cash to Seller giving Bank a nonrecourse mortgage on the land. The land is the security for the mortgage which bears an adequate interest rate. What is Mortgagor's cost basis in the land?",
+            
+            answers: ["$100,000 Basis", "$80,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$100,000 Basis"
+        },
+        {
+            question: "What is Mortgagor's basis in the land if the $100,000 of mortgage proceeds are used to improve the land?",
+            
+            answers: ["$100,000 Basis", "$20,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$200,000 Basis"
+        },
+        {
+            question: "What is Mortgagor's basis in the land if the $100,000 of mortgage proceeds are used to purchase stocks and bonds worth $100,000?",
+            
+            answers: ["$100,000 Basis", "$20,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$100,000 Basis"
+        },
+		   {
+            question: "Insured died in the current year owning a policy of insurance that would pay Beneficiary $100,000 but under which several alternatives were available to Beneficiary. What result if Beneficiary simply accepts the $100,000 in cash?",
+            answers: ["No Gross Income", "Has Gross Income", "Depends", "Perhaps"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "What result in (a) above, if Beneficiary instead leaves all the proceeds with the company and they pay her $10,000 interest in the current year?",
+            answers: ["$15000 Gross Income", "$10000 Gross Income", "No Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "What result if Insured’s Daughter is Beneficiary of the policy and, in accordance with an option that she elects, the company pays her $12,000 in the current year?  Assume that such payments will be made annually for her life and that she has a 25-year life expectancy.",
+            answers: ["No Tax Consequence", "Gross Income of $8000", "Gross Income of $5000", "Gross Income of $3000"],
+            correctAnswer: "Gross Income of $8000"
+        },
+        {
+            question: "Jock agreed to play football for Pro Corporation.  Pro, fearful that Jock might not survive, acquired a $1 million insurance policy on Jock’s life.  If Jock dies during the term of the policy and the proceeds of the policy are paid to Pro, what different consequences will Pro incur under the following alternatives. With Jock’s consent Pro took out and paid $20,000 for a two year term policy on Jock’s life?",
+            answers: ["Included in GI", "Excluded from GI", "Depends", "Perhaps"],
+            correctAnswer: "Excluded from GI"
+        },
+        {
+            question: " In the current year, T purchases a single life annuity with no refund feature for $48,000.  Under the contract T is to receive $3,000 per year for life.  T has a 24-year life expectancy. To what extent, if at all, is T taxable on the $3,000 received in the first year?",
+            answers: ["The entire amount is taxable", "Only 2/3 of the $3,000 is taxable", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Only 2/3 of the $3,000 is taxable"
+        },
+         {
+            question: "If the law remains the same and T is still alive, how will T be taxed on the $3,000 received in the thirtieth year of the annuity payments?",
+            answers: ["The entire amount is taxable", "Only 2/3 of the $3,000 is taxable", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "The entire amount is taxable"
+        },
+		 {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a settlement of $7,000 of cash?",
+            answers: ["No Gross Income", "Gross Income of $3000", "Gross Income of $10000", "Depends"],
+            correctAnswer: "Gross Income of $3000"
+        },
+        {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a painting with basis and fair market value of $8,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$2000 Gross Income"
+        },
+       {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with a painting with a value of $8000 and a basis of $5,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$2000 Gross Income"
+        },
+        {
+            question: "Poor borrowed $10,000 from Rich several years ago.  What tax consequences to Poor if Poor pays off the so far undiminished debt with services, in the form of remodeling Rich’s office, which are worth $10,000?",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "Mortgagor purchases a parcel of land held for investment from Seller for $100,000 with $20,000 of cash paid directly by Mortgagor and $80,000 paid from the proceeds of a recourse mortgage incurred from Bank.  Mortgagor is personally liable for the loan and the land is security for the loan.  When the land increases in value to $300,000, Mortgagor borrows another $100,000 from Bank again incurring personal liability and again with the land as security.  Mortgagor uses the $100,000 of loan proceeds to purchase stocks and bonds.  Several years later when the principal amount of the mortgages is still $180,000, the land declines in value to $170,000, Mortgagor transfers the land to the Bank, and the Bank discharges all of the Mortgagor’s indebtedness. What are the tax consequences to Mortgagor? ",
+            answers: ["$2000 Gross Income", "$10000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "Student received a $20,000 loan from Law School to be used for the payment of tuition and books. What results if the loan is forgiven by the school in 2022",
+            answers: ["$2000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "No Gross Income"
+        },
+		 {
+            question: "Plaintiff brought suit and unless otherwise indicated successfully recovered.  Discuss the tax consequences in the following alternative situations: Plaintiff’s suit was based on a recovery of an $8,000 loan made to Debtor.  Plaintiff recovered $8,500 cash, $8,000 for the loan plus $500 of interest.",
+            answers: ["No Gross Income", "Gross Income of $300", "Gross Income of $500", "Depends"],
+            correctAnswer: "Gross Income of $500"
+        },
+        {
+            question: "What result to Debtor under the facts of (a), above, if instead Debtor transferred some land worth $8,500 with a basis of $2,000 to Plaintiff to satisfy the obligation?  What is Plaintiff’s basis in the land?",
+            answers: ["$2000 Gross Income, $8500 land basis", "$500 Gross Income, $8500 land basis", "No Gross Income", "Depends"],
+            correctAnswer: "$500 Gross Income, $8500 land basis"
+        },
+       {
+            question: "Plaintiff’s suit was based on a breach of a business contract and Plaintiff recovered $8,000 for lost profits and also recovered $16,000 for punitive damages.",
+            answers: ["$24000 Gross Income", "$16000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$24000 Gross Income"
+        },
+        {
+            question: "Plaintiff brought suit and successfully recovered in the following situations.  Discuss the tax consequences to Plaintiff: Plaintiff, a professional gymnast, lost the use of her leg after a psychotic fan assaulted her with a tire iron.  Plaintiff was awarded damages of $100,000.",
+            answers: ["$2000 Gross Income", "$100000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "$50,000 of the recovery in (a), above, is specifically allocated as compensation for scheduled performances Plaintiff failed to make as a result of the injured leg.",
+            answers: ["$10000 Gross Income", "$50000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$50000 Gross Income"
+        },
+        {
+            question: "The jury also awards Plaintiff $200,000 in punitive damages.",
+            answers: ["$200000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "$200000 Gross Income"
+        },
+        {
+            question: "Plaintiff recovered $200,000 in a suit of sexual harassment against the former coach.",
+            answers: ["$200000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "$200000 Gross Income"
+        },
+        {
+            question: "Plaintiff dies as a result of the leg injury, and Plaintiff’s parents recover $1,000,000 of punitive damages awarded in a wrongful death action under long-standing State statute?",
+            answers: ["$1000000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "Injured, who has a 20-year life expectancy, recovers $1 million in a personal injury suit arising out of a boating accident. What are the tax consequences to Injured if the $1 million is deposited in a money market account paying 5% interest?",
+            answers: ["$1000000 Gross Income", "$20000 Gross Income", "Gross Income from Interest", "None of the above"],
+            correctAnswer: "Gross Income from Interest"
+        },
+		   {
+            question: "Brad and Jen’s divorce decree becomes final on January 1 of year one. Discuss the tax consequences of the following transactions to both Brad and Jen: Pursuant to their divorce decree, Brad transfers to Jen in March of year one a parcel of unimproved land he purchased 10 years ago.The land has a basis of $100,000 and a fair market value of $500,000.Jen sells the land in April of year one for $600,000.",
+            answers: ["No Gain or Loss for Brad due to non-recognition rule, Jen has a gain of 500k, basis of 100k and 600k realized", "No gain or loss for both", "Gross Income of $500", "Depends"],
+            correctAnswer: "No Gain or Loss for Brad due to non-recognition rule, Jen has a gain of 500k, basis of 100k and 600k realized"
+        },
+       {
+            question: "Same as (a) above except that the land is transferred to satisfy a debt that Brad owes Jen.The land has a basis of $500,000 and a fair market value of $400,000 at the time of the transfer.Jen sells the land for $350,000.",
+            answers: ["No Gain or Loss for Brad due to non-recognition rule, Jen has a gain of 500k, basis of 100k and 600k realized", "No gain or loss for both", "Brad has no gain or loss due to non- recognition rule. Jen has a basis of 500k, has a 150k loss", "Depends"],
+            correctAnswer: "Brad has no gain or loss due to non- recognition rule. Jen has a basis of 500k, has a 150k loss"
+        },
+		 {
+            question: "Determine the amount of gain that Taxpayers (a married couple filing a joint return) must include in gross income in the following situations: Taxpayers sold their principal residence for $600,000.  They had purchased the residence several years ago for $200,000 and lived in it over those years.",
+            answers: ["No Gross Income", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "Taxpayers in previous question, purchased another principal residence for $600,000 and they sold it 2.5 years later for $1,000,000.",
+            answers: ["No Gross Income", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "What result in previous question, above, if the second sale occurred 1.5 years later?",
+            answers: ["Gains are taxed", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "Gains are taxed"
+        },
+        {
+            question: "What result in previous question, above, if the second sale occurred 1.5 years later?",
+            answers: ["Gains are taxed", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "Gains are taxed"
+        },
+        {
+            question: "What result if Taxpayer who met the ownership and use requirements is a single taxpayer who sold the principal residence for $400,000 and it had an adjusted basis of $190,000 after Taxpayer validly took $10,000 of post 1997 depreciation deductions on the residence which served as an office in Taxpayer’s home?",
+            answers: ["Gains are taxed", "$10000 Gross Income, and $200000 is excluded", "Gross Income of $200,000", "None of the above"],
+            correctAnswer: "$10000 Gross Income, and $200000 is excluded"
+        },
+        {
+            question: "Single Taxpayer purchased a principal residence for $500,000 and after using it for one year, Single sold the residence for $600,000 because Single’s employers transferred Single to a new job location. How much gain must Single include in gross income?",
+            answers: ["Gains of $100,000", "No Gains from the sale", "Gross Income of $500,000", "None of the above"],
+            correctAnswer: "No Gains from the sale"
+        },
+        {
+            question: "Single Taxpayer purchased a principal residence for $500,000 and after using it for one year, Single sold the residence for $600,000 because Single’s employers transferred Single to a new job location. What result in (a), above, if Single sold the residence for $700,000?",
+            answers: ["Gains of $75,000", "No Gains from the sale", "Gross Income of $500,000", "None of the above"],
+            correctAnswer: "Gains of $75,000"
+        },
+		  {
+            question: "Executive has a salaried position with Hi Rolling Corporation under which she earns $80,000 each calendar year. Who is taxed if Executive, at the beginning of the year, directs that $20,000 be paid to her parents?",
+            answers: ["The Executive", "The Parents", "Both", "Neither"],
+            correctAnswer: "The Executive"
+        },
+        {
+            question: "Who is taxed if Executive at the beginning of the year directs that $20,000 of her salary be paid to any charity the Board of Directors of Hi Rolling selects?  (Executive is not a member of the Board.)",
+            answers: ["The Executive", "The Board", "Both", "Neither"],
+            correctAnswer: "The Executive"
+        },
+        {
+            question: "Same as the previous question, except that Executive makes the same request with respect to a $10,000 year end bonus which Corporation has announced toward the end of the year, based on the services rendered during the year?",
+            answers: ["The Executive", "The Corporation", "Both", "Neither"],
+            correctAnswer: "The Executive"
+        },
+        {
+            question: "Father owns land which he purchased several years ago for $80,000. It has a current fair market value of $90,000. Father leases the land on a ten-year lease and is paid $6,000 of rent each year, semi-annually April 1st and October 1st (i.e., $3,000 each payment). What tax consequences to Father and Daughter in the following alternative situations: on April 2nd of the current year, Father assigns Daughter all the future rental payments",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to father"
+        },
+        {
+            question: "Follow up: On April 2nd, Father gives Daughter the land with the right to all the future rental payments. ",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to daughter"
+        },
+        {
+            question: "Follow up: On April 2nd, the father gives Daughter a one-half interest in the land and the right to all the future rental payments.",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed at half / half", "Neither are taxed"],
+            correctAnswer: "Both are taxed at half / half"
+        },
+        {
+            question: "Follow up: Father owns an income interest in a trust which owns the land and on April 2, Father gives his income interest (the right to succeeding rental payments) to Daughter.",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to daughter"
+        },
+    ];
+
+      function showMessage(message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        messageDiv.innerHTML = `<p>${message}</p>`;
+        chatContainer.appendChild(messageDiv);
+    }
+
+    function showAnswers(question) {
+        answersContainer.innerHTML = '';
+        question.answers.forEach((answer, index) => {
+            const answerButton = document.createElement('button');
+            answerButton.className = 'answer-button';
+            answerButton.textContent = answer;
+            answerButton.addEventListener('click', () => handleUserInput(answer));
+            answersContainer.appendChild(answerButton);
+        });
+    }
+
+     function handleUserInput(userAnswer) {
+        if (currentQuestionIndex >= 0) {
+            const currentQuestion = questions[currentQuestionIndex];
+            answersContainer.innerHTML = '';
+            if (userAnswer.toLowerCase() === currentQuestion.correctAnswer.toLowerCase()) {
+                totalScore++;
+                showStatus("Correct answer!");
+            } else {
+                showStatus("Incorrect answer.");
+            }
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(questions[currentQuestionIndex]);
+        } else {
+            showStatus(`Quiz completed. Your score: ${totalScore} out of ${questions.length}`);
+            startButton.style.display = 'none';
+            startOverButton.style.display = 'block';
+            generatePDFButton.style.display = 'block';
+        }
+    }
+
+    function showQuestion(question) {
+        questionContainer.innerHTML = question.question;
+        showAnswers(question);
+    }
+
+    function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
+        const statusMessage = document.createElement('div');
+        statusMessage.className = 'status-message';
+        statusMessage.textContent = status;
+        statusContainer.appendChild(statusMessage);
+    }
+
+    startButton.addEventListener('click', () => {
+        startButton.style.display = 'none';
+        currentQuestionIndex = 0;
+        chatContainer.removeChild(chatContainer.lastChild);
+        quizContainer.style.display = 'block';
+        showQuestion(questions[currentQuestionIndex]);
+    });
+
+    startOverButton.addEventListener('click', () => {
+        startOverButton.style.display = 'none';
+        generatePDFButton.style.display = 'none';
+        startButton.style.display = 'block';
+        quizContainer.style.display = 'none';
+        questionContainer.innerHTML = '';
+        statusContainer.innerHTML = '';
+        totalScore = 0;
+        showMessage("Click 'Start' to begin.", false);
+    });
+
+    generatePDFButton.addEventListener('click', () => {
+    if (typeof jsPDF !== 'undefined') {
+        const doc = new jsPDF();
+        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+
+        let yPos = 40;
+        questions.forEach((question, index) => {
+            const questionText = `${index + 1}. ${question.question}`;
+            const answerText = `Correct Answer: ${question.correctAnswer}`;
+            doc.setFontSize(12);
+            doc.text(20, yPos, questionText);
+            doc.setFontSize(10);
+            doc.text(20, yPos + 10, answerText);
+            yPos += 30;
+        }); // Close the forEach function here
+
+        const pdfDataUri = doc.output('datauristring');
+        const blob = dataURItoBlob(pdfDataUri);
+
+        saveAs(blob, 'Cumulative_Exam.pdf');
+    } else {
+        showMessage("Error: The PDF library is not available.");
+    }
+});
+
+    function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimeString });
+    }
+</script>
+</body>
+</html>
