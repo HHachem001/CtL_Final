@@ -222,15 +222,46 @@ body::before {
           box-shadow: .2em -.2em 0 0 currentcolor;
         }
       }
+	     /* Added this style for the "Thinking" animation */
+        @keyframes thinkingAnimation {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .thinking-message {
+            animation: thinkingAnimation 2s infinite; /* Adjust the duration as needed */
+        }
+
+        /* Add this style to your existing CSS or in a separate style block */
+        #thinking-popup {
+            display: none;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .thinking-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #002855; /* Adjust the color to match your design */
+        }
     </style>
 </head>
 
 <body>
     <!-- Chatbot Container -->
     <div id="chat-container">
-	<div id="thinking-popup" class="loading-spinner-container">
-        <div class="spinner"></div>
-        <p> Current Status: 🤔 Thinking...</p>
+	<div id="thinking-popup" class="thinking-container">
+        <p class="thinking-message"> Current Status: 🤔 Thinking..</p>
     </div>
         <div id="chat-header">
             ✨ Your Basic Income Tax A.I. Assistant
