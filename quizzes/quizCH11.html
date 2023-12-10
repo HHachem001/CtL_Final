@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH11 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 11 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,43 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Determine the amount of gain that Taxpayers (a married couple filing a joint return) must include in gross income in the following situations: Taxpayers sold their principal residence for $600,000.  They had purchased the residence several years ago for $200,000 and lived in it over those years.",
+            answers: ["No Gross Income", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "No Gross Income"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "Taxpayers in previous question, purchased another principal residence for $600,000 and they sold it 2.5 years later for $1,000,000.",
+            answers: ["No Gross Income", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "What result in previous question, above, if the second sale occurred 1.5 years later?",
+            answers: ["Gains are taxed", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "Gains are taxed"
+        },
+        {
+            question: "What result in previous question, above, if the second sale occurred 1.5 years later?",
+            answers: ["Gains are taxed", "$600,000 Gross Income", "Gross Income of $200,000", "Depends"],
+            correctAnswer: "Gains are taxed"
+        },
+        {
+            question: "What result if Taxpayer who met the ownership and use requirements is a single taxpayer who sold the principal residence for $400,000 and it had an adjusted basis of $190,000 after Taxpayer validly took $10,000 of post 1997 depreciation deductions on the residence which served as an office in Taxpayer’s home?",
+            answers: ["Gains are taxed", "$10000 Gross Income, and $200000 is excluded", "Gross Income of $200,000", "None of the above"],
+            correctAnswer: "$10000 Gross Income, and $200000 is excluded"
+        },
+        {
+            question: "Single Taxpayer purchased a principal residence for $500,000 and after using it for one year, Single sold the residence for $600,000 because Single’s employers transferred Single to a new job location. How much gain must Single include in gross income?",
+            answers: ["Gains of $100,000", "No Gains from the sale", "Gross Income of $500,000", "None of the above"],
+            correctAnswer: "No Gains from the sale"
+        },
+        {
+            question: "Single Taxpayer purchased a principal residence for $500,000 and after using it for one year, Single sold the residence for $600,000 because Single’s employers transferred Single to a new job location. What result in (a), above, if Single sold the residence for $700,000?",
+            answers: ["Gains of $75,000", "No Gains from the sale", "Gross Income of $500,000", "None of the above"],
+            correctAnswer: "Gains of $75,000"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +144,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +172,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +218,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_11_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
