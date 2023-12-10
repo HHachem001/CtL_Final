@@ -84,6 +84,13 @@
     <h1>Select a chapter to begin:</h1>
 
     <div class="chapter-container">
+
+	     <div class="chapter" onclick="redirectToRandom()">
+            <h2>Random Chapter</h2>
+            <p>Click to go to a random quiz chapter.</p>
+        </div>
+    </div>
+	
         <div class="chapter" id="chapter2" onclick="redirectTo('https://hhachem001.github.io/CtL_Final/quizzes/quizCH2.html')">
             <h2>Chapter 2</h2>
             <p>Gross Income: The Scope of Section 61</p>
@@ -209,6 +216,34 @@
 	    <script>
         function redirectTo(url) {
             window.location.href = url;
+        }
+
+	function redirectToRandom() {
+            // Define an array of URLs for your quiz chapters
+            var quizChapterURLs = [
+                'https://hhachem001.github.io/CtL_Final/quizzes/quizCH2.html',
+                'https://hhachem001.github.io/CtL_Final/quizzes/quizCH3.html',
+		'https://hhachem001.github.io/CtL_Final/quizzes/quizCH4.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH5.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH6.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH7.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH8.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH9.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH10.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH11.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH12.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH14.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH15.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH16.html',
+		    'https://hhachem001.github.io/CtL_Final/quizzes/quizCH21.html',
+                // Add other quiz chapter URLs as needed
+            ];
+
+            // Generate a random index to pick a random quiz chapter URL
+            var randomIndex = Math.floor(Math.random() * quizChapterURLs.length);
+
+            // Redirect the user to the randomly selected quiz chapter
+            window.location.href = quizChapterURLs[randomIndex];
         }
     </script>
 
