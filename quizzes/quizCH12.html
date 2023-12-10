@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH12 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 12 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,43 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Executive has a salaried position with Hi Rolling Corporation under which she earns $80,000 each calendar year. Who is taxed if Executive, at the beginning of the year, directs that $20,000 be paid to her parents?",
+            answers: ["The Executive", "The Parents", "Both", "Neither"],
+            correctAnswer: "The Executive"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "Who is taxed if Executive at the beginning of the year directs that $20,000 of her salary be paid to any charity the Board of Directors of Hi Rolling selects?  (Executive is not a member of the Board.)",
+            answers: ["The Executive", "The Board", "Both", "Neither"],
+            correctAnswer: "The Executive"
+        },
+        {
+            question: "Same as the previous question, except that Executive makes the same request with respect to a $10,000 year end bonus which Corporation has announced toward the end of the year, based on the services rendered during the year?",
+            answers: ["The Executive", "The Corporation", "Both", "Neither"],
+            correctAnswer: "The Executive"
+        },
+        {
+            question: "Father owns land which he purchased several years ago for $80,000. It has a current fair market value of $90,000. Father leases the land on a ten-year lease and is paid $6,000 of rent each year, semi-annually April 1st and October 1st (i.e., $3,000 each payment). What tax consequences to Father and Daughter in the following alternative situations: on April 2nd of the current year, Father assigns Daughter all the future rental payments",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to father"
+        },
+        {
+            question: "Follow up: On April 2nd, Father gives Daughter the land with the right to all the future rental payments. ",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to daughter"
+        },
+        {
+            question: "Follow up: On April 2nd, the father gives Daughter a one-half interest in the land and the right to all the future rental payments.",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed at half / half", "Neither are taxed"],
+            correctAnswer: "Both are taxed at half / half"
+        },
+        {
+            question: "Follow up: Father owns an income interest in a trust which owns the land and on April 2, Father gives his income interest (the right to succeeding rental payments) to Daughter.",
+            answers: ["Tax to father", "Tax to daughter", "Both are taxed", "Neither are taxed"],
+            correctAnswer: "Tax to daughter"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +144,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +172,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +218,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_12_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
