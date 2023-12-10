@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH6 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 6 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,76 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Owner purchases some land for $10,000 and later sells it for $16,000. Determine the amount of Owner's gain on the sale.",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+       {
+            question: "What difference in result in (a), above, if Owner purchased the land by paying $1,000 for an option to purchase the land for an additional $9,000 and subsequently exercised the option?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+         {
+            question: "What result to Owner in (b), above, if rather than ever actually acquiring th eland Owner sold the option to Investor for $1,500?",
+            answers: ["$15000 Gain", "$1000 gain", "No Gain", "$500 gain"],
+            correctAnswer: "$500 gain"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "What difference in result in (a) above, if Owner purchased the land by making a $2,000 cash payment from Owner’s funds and an $8,000 payment by borrowing $8,000 from the bank in a recourse mortgage (on which Owner is personably liable)?  Would it make any difference if the mortgage was a non-recourse liability (on which only the land was security for the obligation)?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+        {
+            question: "What result in (a), above, if Owner purchased the land for $10,000, spent $2,000 in clearing the land prior to its sale, and sold it for $18,000?",
+            answers: ["$16000 Gain", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$6000 gain"
+        },
+        {
+            question: "Donor gave Donee property under circumstances that required no payment of gift tax.  What gain or loss to Donee on the subsequent sale of the property if: The property had cost Donor $20,000, had a $30,000 fair market value at the time of the gift, and Donee sold it for: (1) $35,000? (2) $15,000 (3) $25,000",
+            answers: ["(1) $15000 gain (2) $5000 loss (3) $5000 gain ", "(1) $15000 loss (2) $5000 gain (3) $5000 gain ", "No Gain", "None of the Above"],
+            correctAnswer: "(1) $15000 gain (2) $5000 loss (3) $5000 gain "
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value.What are the income tax consequences to Andre?",
+            answers: ["$0 Gain Recognized, $30,000 Gain Realized", "$6000 gain", "No Gain", "$10000 gain"],
+            correctAnswer: "$0 Gain Recognized, $30,000 Gain Realized"
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value. What is Steffi's basis in the property?",
+            answers: ["$40,000", "$70,000", "No basis", "$10,000"],
+            correctAnswer: "$40,000"
+        },
+        {
+            question: "Andre purchased some land ten years ago for $40,000 cash. The property appreciated to $70,000 at which time Andre sold it to his wife Steffi for $70,000 cash, its fair market value. What gain to Steffi if she immediately resells the property?",
+            answers: ["$40,000", "$30,000", "No gain", "$70,000"],
+            correctAnswer: "$30,000"
+        },
+        {
+            question: "In the current year, Giver holds two blocks of identical stock, both worth $1,000,000. Giver purchased the first block years ago for $50,000 and the second block more recently for $950,000. Giver plans to make an inter vivos gift of one block and retain the second until death. Which block of stock should Giver transfer inter vivos and why?",
+            answers: ["$950,000 block inter vivos & the $50,000 block at death", "$50,000 Now", "Nothing", "$70,000"],
+            correctAnswer: "$950,000 block inter vivos & the $50,000 block at death"
+        },
+        {
+            question: "Mortgagor purchases a parcel of land from Seller for $100,000. Mortgagor borrows $80,000 from bank and pays that amount and an additional $20,000 of cash to Seller giving Bank a nonrecourse mortgage on the land. The land is the security for the mortgage which bears an adequate interest rate. What is Mortgagor's cost basis in the land?",
+            
+            answers: ["$100,000 Basis", "$80,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$100,000 Basis"
+        },
+        {
+            question: "What is Mortgagor's basis in the land if the $100,000 of mortgage proceeds are used to improve the land?",
+            
+            answers: ["$100,000 Basis", "$20,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$200,000 Basis"
+        },
+        {
+            question: "What is Mortgagor's basis in the land if the $100,000 of mortgage proceeds are used to purchase stocks and bonds worth $100,000?",
+            
+            answers: ["$100,000 Basis", "$20,000 Basis", "Nothing", "$20,000"],
+            correctAnswer: "$100,000 Basis"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +177,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +205,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +251,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_6_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
