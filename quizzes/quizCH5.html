@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH5 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 5 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,43 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Each year, national sportswriters get together and select the single most outstanding amateur athlete in the country and award that person a check for $5,000. Michael, a talented swimmer, has been selected for this year’s award. The ward is given with the stipulation that the winner deliver a 15-minute “acceptance speech” at an awards banquet. Michael, essentially delivering an acceptable rejection “acceptance speech,” designates the award to the Paralympic Games, a charity under §170, to receive the award. The sportswriters send the check to the Paralympic Games. Will Michael be able to exclude the $5,000 from his gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "What result if Michael receives the $5,000 check from the U.S. Olympic Committee for his performance at the Olympics and deposits the check?",
+            answers: ["Excludable", "Not Excludable", "Depends", "Perhaps"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Student working toward an A.B. degree is awarded a $15,000 for full tuition and for room and board during the academic year. $10,000 for tuition and books, and $5,000 for room and board. As a scholarship recipient, student is required to do about 300 hours of research for the professor to whom he is assigned. Non-scholarship students, if hired are paid $10/hr for such work. What is the tax consequence to student?",
+            answers: ["No Tax Consequence", "Gross Income of $8000", "Gross Income of $5000", "Gross Income of $3000"],
+            correctAnswer: "Gross Income of $8000"
+        },
+        {
+            question: "What tax consequences to Student if all students are required to do 300 hours of research or faculty?",
+            answers: ["Included in GI", "Excluded from GI", "Depends", "Perhaps"],
+            correctAnswer: "Included in GI"
+        },
+        {
+            question: "What result if Student is not required to do any research but receives the $15,000 as an athletic Scholarship?",
+            answers: ["The entire amount is excluded", "Only $10,000 is excluded", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Only $10,000 is excluded"
+        },
+        {
+            question: "Secretary, in a large tax law firm, receives $10,000 stipend from her firm to assist her while on leave of absence to obtain a college degree. The stipend is part of a firm plan under which al recipients are required to return to the firm following their educational leave. What are the tax consequences to the secretary?",
+            answers: ["The entire amount is excluded", "Yes, but only the first $5250", "Maybe", "Depends"],
+            correctAnswer: "Yes, but only the first $5250"
+        },
+        {
+            question: "What tax consequences to Secretary if she is not required to return to the firm after completing her degree?",
+            answers: ["Excludable Prop. under Reg §1.117-6(d)(2) because the $ represents compensation for past, present, or future services.", "No Exclusion Prop. Reg §1.117-6(d)(2) because the $ does not represent compensation for past, present, or future services.", "Maybe", "Depends"],
+            correctAnswer: "Excludable Prop. under Reg §1.117-6(d)(2) because the $ represents compensation for past, present, or future services."
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +144,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +172,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +218,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_5_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
