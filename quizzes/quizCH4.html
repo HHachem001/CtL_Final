@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH4 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 4 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,58 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Employee of a national hotel chain stays in one of the chain’s hotels in another town rent-free while on vacation.  The hotel has several empty rooms. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "The desk clerk bounces a paying guest so Employee can stay rent-free. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
+        },
+        {
+            question: "Employee pays the bill and receives a cash rebate from the chain. Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "E is an officer in the hotel chain and rent-free use is provided only to officers and all other employees pay 60% of the normal rent.Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes", "Depends", "Perhaps"],
+            correctAnswer: "No"
+        },
+        {
+            question: " Employee sells insurance and employer Insurance Company allows Employee 20% off the $1,000 cost of the policy.Can this fringe benefit be excluded from gross income?",
+            answers: ["No", "Yes, the entire amount", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Yes, but only the max 20% discount"
+        },
+        {
+            question: " Employee is a salesman in a home electronics appliance store.  The prior year the store had $1,000,000 in sales and a $600,000 cost of goods sold.  Employee buys a $2,000 video cassette recorder from Employer for $1,000. Can this fringe benefit be excluded from gross income?",
+            answers: ["Yes, the entire amount", "Yes, but only $800", "Maybe", "Depends"],
+            correctAnswer: "Yes, but only $800"
+        },
+        {
+            question: "Employee attends a business convention in another town.  Employer picks up Employee’s costs. Can this fringe benefit be excluded from gross income?",
+            answers: ["Yes", "No", "Maybe", "Depends"],
+            correctAnswer: "Yes"
+        },
+        {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if the nature of Employee’s work does not require Employee to live on the premise as a condition of employment?",
+            answers: ["Excludable", "Not Excludable, and GI of $9000", "Maybe", "Depends"],
+            correctAnswer: "Not Excludable, and GI of $9000"
+        },
+         {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if Employer and Employee simply agreed to a clause in the employment contract requiring Employee to live in the residence?",
+            answers: ["Excludable", "Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "Excludable"
+        },
+        {
+            question: "Employer provides Employee and Souse and Child a residence on Employer’s business premises, having a rental value of $15,000 per year, but charging Employee only $6,000. What result if Employee’s work and contract require Employee to live on the premises and Employer furnishes Employee and family $3,000 worth of groceries during the year?",
+            answers: ["$3000 is Excludable", "$3000 is Not Excludable", "Maybe", "Depends"],
+            correctAnswer: "$3000 is Not Excludable"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +159,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +187,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +233,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_4_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
