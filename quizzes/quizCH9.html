@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH9 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 9 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,53 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Plaintiff brought suit and unless otherwise indicated successfully recovered.  Discuss the tax consequences in the following alternative situations: Plaintiff’s suit was based on a recovery of an $8,000 loan made to Debtor.  Plaintiff recovered $8,500 cash, $8,000 for the loan plus $500 of interest.",
+            answers: ["No Gross Income", "Gross Income of $300", "Gross Income of $500", "Depends"],
+            correctAnswer: "Gross Income of $500"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "What result to Debtor under the facts of (a), above, if instead Debtor transferred some land worth $8,500 with a basis of $2,000 to Plaintiff to satisfy the obligation?  What is Plaintiff’s basis in the land?",
+            answers: ["$2000 Gross Income, $8500 land basis", "$500 Gross Income, $8500 land basis", "No Gross Income", "Depends"],
+            correctAnswer: "$500 Gross Income, $8500 land basis"
+        },
+       {
+            question: "Plaintiff’s suit was based on a breach of a business contract and Plaintiff recovered $8,000 for lost profits and also recovered $16,000 for punitive damages.",
+            answers: ["$24000 Gross Income", "$16000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$24000 Gross Income"
+        },
+        {
+            question: "Plaintiff brought suit and successfully recovered in the following situations.  Discuss the tax consequences to Plaintiff: Plaintiff, a professional gymnast, lost the use of her leg after a psychotic fan assaulted her with a tire iron.  Plaintiff was awarded damages of $100,000.",
+            answers: ["$2000 Gross Income", "$100000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "$50,000 of the recovery in (a), above, is specifically allocated as compensation for scheduled performances Plaintiff failed to make as a result of the injured leg.",
+            answers: ["$10000 Gross Income", "$50000 Gross Income", "No Gross Income", "Depends"],
+            correctAnswer: "$50000 Gross Income"
+        },
+        {
+            question: "The jury also awards Plaintiff $200,000 in punitive damages.",
+            answers: ["$200000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "$200000 Gross Income"
+        },
+        {
+            question: "Plaintiff recovered $200,000 in a suit of sexual harassment against the former coach.",
+            answers: ["$200000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "$200000 Gross Income"
+        },
+        {
+            question: "Plaintiff dies as a result of the leg injury, and Plaintiff’s parents recover $1,000,000 of punitive damages awarded in a wrongful death action under long-standing State statute?",
+            answers: ["$1000000 Gross Income", "$20000 Gross Income", "No Gross Income", "None of the above"],
+            correctAnswer: "No Gross Income"
+        },
+        {
+            question: "Injured, who has a 20-year life expectancy, recovers $1 million in a personal injury suit arising out of a boating accident. What are the tax consequences to Injured if the $1 million is deposited in a money market account paying 5% interest?",
+            answers: ["$1000000 Gross Income", "$20000 Gross Income", "Gross Income from Interest", "None of the above"],
+            correctAnswer: "Gross Income from Interest"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +154,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +182,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +228,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_9_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
