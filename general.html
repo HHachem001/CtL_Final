@@ -228,6 +228,10 @@ body::before {
 <body>
     <!-- Chatbot Container -->
     <div id="chat-container">
+	<div id="thinking-popup" class="loading-spinner-container">
+        <div class="spinner"></div>
+        <p> Current Status: 🤔 Thinking...</p>
+    </div>
         <div id="chat-header">
             ✨ Your Basic Income Tax A.I. Assistant
             <button id="exit-btn" onclick="redirectToWelcome()">Exit</button>
@@ -255,6 +259,12 @@ body::before {
 </script>
 	
   <script type="module">
+  
+			const loadingSpinner = document.getElementById('loading-indicator');
+            const thinkingPopup = document.getElementById('thinking-popup');
+			
+			thinkingPopup.style.display = 'none';
+
     // Import the necessary library
     import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.10.1';
 
@@ -303,18 +313,46 @@ body::before {
         appendMessage('Bot', 'Hello! I\'m your tax assistant. I am currently loading the A.I. Model into your browser cache.');
     }
 
-    async function handleUserInput(input) {
+   // Modify your handleUserInput function
+async function handleUserInput(input) {
+    // Show thinking popup after a one-second delay
+    showThinkingPopup();
+
+    // Introduce a one-second delay using setTimeout
+    setTimeout(async () => {
+        // Hide thinking popup
+        hideThinkingPopup();
+
         const normalizedInput = input.trim().toLowerCase();
         context.userQuestions.push(normalizedInput);
 
-        const output = await generator(normalizedInput, { max_new_tokens: 100 });
+        // Modify the prompt to include the context of taxation
+        const promptWithContext = `in relation to taxes, ${normalizedInput}`;
+
+        const output = await generator(promptWithContext, { max_new_tokens: 1000 });
         context.botResponses.push(output[0].generated_text);
 
         analyzeUserInput(normalizedInput);
 
         // Adjusted to display the generated response without explicitly stating "federal income tax"
-        appendMessage('Bot', output[0].generated_text);
-    }
+        appendMessage('Bot', output[0].generated_text, true); // Pass true for AI responses
+
+        // Hide loading spinner once the AI has responded
+        loadingSpinner.style.display = 'none';
+    }, 1000); // 1000 milliseconds (1 second)
+}
+
+
+// Add these helper functions for showing and hiding the "thinking" popup
+function showThinkingPopup() {
+    const thinkingPopup = document.getElementById('thinking-popup');
+    thinkingPopup.style.display = 'block';
+}
+
+function hideThinkingPopup() {
+    const thinkingPopup = document.getElementById('thinking-popup');
+    thinkingPopup.style.display = 'none';
+}
 
     function analyzeUserInput(normalizedInput) {
         if (normalizedInput.includes('income range')) {
@@ -594,13 +632,15 @@ body::before {
         context.lastCategory = null;
     }
 
-    function appendMessage(sender, message) {
-        const messageElement = document.createElement('div');
-        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-        const chatMessages = document.getElementById('chat-messages');
-        chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+    function appendMessage(sender, message, isAI = false) {
+    const messageElement = document.createElement('div');
+    const senderLabel = isAI ? 'A.I. bot also says' : sender;
+    messageElement.innerHTML = `<strong>${senderLabel}:</strong> ${message}`;
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 
     const inputField = document.getElementById('input-text');
     inputField.addEventListener('keypress', async function (e) {
