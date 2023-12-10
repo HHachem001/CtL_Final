@@ -634,7 +634,7 @@ function hideThinkingPopup() {
 
     function appendMessage(sender, message, isAI = false) {
     const messageElement = document.createElement('div');
-    const senderLabel = isAI ? 'A.I. bot also says' : sender;
+    const senderLabel = isAI ? 'A.I. bot says' : sender;
     messageElement.innerHTML = `<strong>${senderLabel}:</strong> ${message}`;
     const chatMessages = document.getElementById('chat-messages');
     chatMessages.appendChild(messageElement);
