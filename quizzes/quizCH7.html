@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic Income Tax Quiz</title>
+    <title>CH7 Quiz</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             text-align: center;
@@ -15,10 +15,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
+		  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
         }
         .message {
-            text-align: left;
-            margin-bottom: 10px;
+               text-align: left;
+		    margin-bottom: 10px;
+		    text-shadow: 0 0 black;
+		    font-style: italic;
+
         }
         .user-message {
             text-align: right;
@@ -35,14 +39,28 @@
             cursor: pointer;
         }
         .status-message {
-            margin: 10px 0;
+	    margin: 10px 0;
+	    font-size: large;
+	    color: red;
         }
+        	.exit-button {
+            margin-top: 30px;
+            background-color: #eb3838;
+            color: #fff;
+            padding: 5px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+		
+		.exit-button:hover {
+			            background-color: #c91313;
+		}
     </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="message bot-message">
-        <p>Welcome to the Basic Income Tax Quiz! Click 'Start' to begin.</p>
+    <div class="message bot-message">         
+        <p>Welcome to the Chapter 7 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
     <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
@@ -51,6 +69,7 @@
         <div id="answers-container"></div>
         <div id="status-container"></div>
         <button id="start-over-button" class="answer-button" style="display: none;">Start Over</button>
+	    <a href="https://hhachem001.github.io/CtL_Final/quiz_redirect.html" class="exit-button">Exit</a>
     </div>
 </div>
 <script src="jspdf.js"></script>
@@ -71,18 +90,38 @@
 
     const questions = [
         {
-            question: "Can an individual, who is not engaged in the business of gambling, deduct gambling losses?",
-            answers: ["No, losses from gambling are not deductible", "yes", "depends", "perhaps"],
-            correctAnswer: "No, losses from gambling are not deductible"
+            question: "Insured died in the current year owning a policy of insurance that would pay Beneficiary $100,000 but under which several alternatives were available to Beneficiary. What result if Beneficiary simply accepts the $100,000 in cash?",
+            answers: ["No Gross Income", "Has Gross Income", "Depends", "Perhaps"],
+            correctAnswer: "No Gross Income"
         },
         {
-            question: "What does IRC mean?",
-            answers: ["Internal Revenue Code", "Infinite Revenue Calculator", "Internal Revenue Chapter", "Internal Revenue Charter"],
-            correctAnswer: "Internal Revenue Code"
-        }
+            question: "What result in (a) above, if Beneficiary instead leaves all the proceeds with the company and they pay her $10,000 interest in the current year?",
+            answers: ["$15000 Gross Income", "$10000 Gross Income", "No Income", "Depends"],
+            correctAnswer: "$10000 Gross Income"
+        },
+        {
+            question: "What result if Insured’s Daughter is Beneficiary of the policy and, in accordance with an option that she elects, the company pays her $12,000 in the current year?  Assume that such payments will be made annually for her life and that she has a 25-year life expectancy.",
+            answers: ["No Tax Consequence", "Gross Income of $8000", "Gross Income of $5000", "Gross Income of $3000"],
+            correctAnswer: "Gross Income of $8000"
+        },
+        {
+            question: "Jock agreed to play football for Pro Corporation.  Pro, fearful that Jock might not survive, acquired a $1 million insurance policy on Jock’s life.  If Jock dies during the term of the policy and the proceeds of the policy are paid to Pro, what different consequences will Pro incur under the following alternatives. With Jock’s consent Pro took out and paid $20,000 for a two year term policy on Jock’s life?",
+            answers: ["Included in GI", "Excluded from GI", "Depends", "Perhaps"],
+            correctAnswer: "Excluded from GI"
+        },
+        {
+            question: " In the current year, T purchases a single life annuity with no refund feature for $48,000.  Under the contract T is to receive $3,000 per year for life.  T has a 24-year life expectancy. To what extent, if at all, is T taxable on the $3,000 received in the first year?",
+            answers: ["The entire amount is taxable", "Only 2/3 of the $3,000 is taxable", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "Only 2/3 of the $3,000 is taxable"
+        },
+         {
+            question: "If the law remains the same and T is still alive, how will T be taxed on the $3,000 received in the thirtieth year of the annuity payments?",
+            answers: ["The entire amount is taxable", "Only 2/3 of the $3,000 is taxable", "Yes, but only the max 20% discount", "Perhaps"],
+            correctAnswer: "The entire amount is taxable"
+        },
     ];
 
-    function showMessage(message, isUser = false) {
+     function showMessage(message, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
         messageDiv.innerHTML = `<p>${message}</p>`;
@@ -100,7 +139,7 @@
         });
     }
 
-    function handleUserInput(userAnswer) {
+     function handleUserInput(userAnswer) {
         if (currentQuestionIndex >= 0) {
             const currentQuestion = questions[currentQuestionIndex];
             answersContainer.innerHTML = '';
@@ -128,6 +167,8 @@
     }
 
     function showStatus(status) {
+        // Clear the status container before displaying a new status message
+        statusContainer.innerHTML = '';
         const statusMessage = document.createElement('div');
         statusMessage.className = 'status-message';
         statusMessage.textContent = status;
@@ -172,7 +213,7 @@
         const pdfDataUri = doc.output('datauristring');
         const blob = dataURItoBlob(pdfDataUri);
 
-        saveAs(blob, 'Professional_Quiz.pdf');
+        saveAs(blob, 'Chapter_7_Quiz.pdf');
     } else {
         showMessage("Error: The PDF library is not available.");
     }
