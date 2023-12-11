@@ -1,4 +1,4 @@
-# [Vist the Tax Assistant Website](https://hhachem001.github.io/CtL_Final/Welcome.html)
+## [Vist the Tax Assistant Website](https://hhachem001.github.io/CtL_Final/Welcome.html)
 
 ## Basic Federal Income Tax Assistant 
 
@@ -44,7 +44,6 @@ The project is built using the following technologies:
 - HTML
 - CSS
 - JavaScript
-- PHP
 
 ## Current Known Issues in Version v12.023A
 
@@ -54,9 +53,18 @@ The project is built using the following technologies:
 - Feedback submitted by users is not forwarded to me, and it ends up in the "void" where it will never be read.
 - Basic RegEx Chatbot is not as useful as the A.I. ChatBot, and it will be deprecated
 
+  
+## How was it created? What tools did you use?
+
+- It was created with the assistance of ChatGPT, which was used for UI design and bug fixes.
+- No commerically available web design tools were utilized.
+- When I found myself stuck trying to debug code, I would have ChatGPT read through forum discussions to try and inference a possible solution.
+- I also utilized Google Chrome's debugging and console tools to figure out where the issues were. (It proved quite useful to determine whether the LLM was loaded into cache)
+- Knowlegde gained from Professor Colarusso's was used to build the IRC Code extractor tool, as it relies on the extensive use of regular expression logic to scrape the document for relevant terms.
+
 ## Acknowledgments
 
 - **Creator:** The Basic Income Tax website and the A.I. Frontend was designed and created by Hashim Hachem.
 
-- **Assistance:** Special thanks to GitHub Copilot for their assistance in the development process and for providing free access to the Copilot A.I.
+- **Assistance:** Special thanks to Professor David Colarusso for his assistance in the development process, and to GitHub for providing free access to the Copilot A.I.
 
