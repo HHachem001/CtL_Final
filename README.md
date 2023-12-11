@@ -45,7 +45,7 @@ The project is built using the following technologies:
 - CSS
 - JavaScript
 
-## Current Known Issues in Version v12.023A
+## Current Known Issues in Beta Version v12.023A
 
 - A.I. Course Notes search feature is not handing off user prompt to the larger LLM
 - IRC Code Extractor may not capture all Revenue Codes from the uploaded PDF
