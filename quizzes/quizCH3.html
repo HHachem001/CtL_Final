@@ -63,7 +63,7 @@
         <p>Welcome to the Chapter 3 Quiz! Click 'Start' to begin.</p>
     </div>
     <button id="start-button" class="answer-button">Start</button>
-    <button id="generate-pdf-button" class="answer-button" style="display: none;">Generate PDF</button>
+	<button id="generate-pdf-button" class="answer-button" style="display: none;" onclick="generatePDF()">Generate PDF</button>
     <div id="quiz-container" style="display: none;">
         <div id="question-container"></div>
         <div id="answers-container"></div>
@@ -74,7 +74,9 @@
 </div>
 <script src="jspdf.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.71/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.71/vfs_fonts.js"></script>
+	
 <script>
     const chatContainer = document.querySelector('.chat-container');
     const startButton = document.getElementById('start-button');
@@ -205,41 +207,25 @@
         showMessage("Click 'Start' to begin.", false);
     });
 
-    generatePDFButton.addEventListener('click', () => {
-    if (typeof jsPDF !== 'undefined') {
-        const doc = new jsPDF();
-        doc.text(20, 20, 'Basic Income Tax Quiz Questions and Answers');
+ function generatePDF() {
+    const docDefinition = {
+        content: [],
+    };
 
-        let yPos = 40;
-        questions.forEach((question, index) => {
-            const questionText = `${index + 1}. ${question.question}`;
-            const answerText = `Correct Answer: ${question.correctAnswer}`;
-            doc.setFontSize(12);
-            doc.text(20, yPos, questionText);
-            doc.setFontSize(10);
-            doc.text(20, yPos + 10, answerText);
-            yPos += 30;
-        }); // Close the forEach function here
+    questions.forEach((question, index) => {
+        const questionText = `${index + 1}. ${question.question}`;
+        const answerText = `Correct Answer: ${question.correctAnswer}`;
 
-        const pdfDataUri = doc.output('datauristring');
-        const blob = dataURItoBlob(pdfDataUri);
+        docDefinition.content.push({ text: questionText });
+        docDefinition.content.push({ text: answerText, margin: [0, 5] }); // Add margin for spacing
 
-        saveAs(blob, 'Chapter_3_Quiz.pdf');
-    } else {
-        showMessage("Error: The PDF library is not available.");
-    }
-});
+        // Add spacing between questions
+        docDefinition.content.push({ text: '', margin: [0, 10] });
+    });
 
-    function dataURItoBlob(dataURI) {
-        const byteString = atob(dataURI.split(',')[1]);
-        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-        const ab = new ArrayBuffer(byteString.length);
-        const ia = new Uint8Array(ab);
-        for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-        return new Blob([ab], { type: mimeString });
-    }
+    pdfMake.createPdf(docDefinition).download('Chapter_2_Quiz.pdf');
+}
+
 </script>
 </body>
 </html>
