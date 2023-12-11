@@ -54,7 +54,7 @@ The project is built using the following technologies:
 - Feedback submitted by users is not forwarded to me, and it ends up in the "void" where it will never be read.
 - Basic RegEx Chatbot is not as useful as the A.I. ChatBot, and it will be deprecated
 
-  ## Acknowledgments
+## Acknowledgments
 
 - **Creator:** The Basic Income Tax website and the A.I. Frontend was designed and created by Hashim Hachem.
 
