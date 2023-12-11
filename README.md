@@ -40,7 +40,7 @@ The project is built using the following technologies:
 
 - **PDF Generation:** The Assistant utilizes the [PDFMake Library](https://pdfmake.github.io/docs/0.1/) for document generation, ensuring efficient and accurate document creation.
 - **AI Utilization:** The project leverages the [Transformer.js AI library](https://github.com/xenova/transformers.js) for AI functionality, enhancing the user experience.
-- - **PDF Extraction:** The project leverages the [Mozilla PDF.js library](https://mozilla.github.io/pdf.js/) for extracting IRC Code from uploaded documents.
+- **PDF Extraction:** The project leverages the [Mozilla PDF.js library](https://mozilla.github.io/pdf.js/) for extracting IRC Code from uploaded documents.
 - HTML
 - CSS
 - JavaScript
@@ -48,11 +48,11 @@ The project is built using the following technologies:
 
 ## Current Known Issues in Version v12.023A
 
--A.I. Course Notes search feature is not handing off user prompt to the larger LLM
--IRC Code Extractor may not capture all Revenue Codes from the uploaded PDF
--Capital Gains calculator may has difficulty determining if there is a NSTCL or a NSTCG
--Feedback submitted by users is not forwarded to me, and it ends up in the "void" where it will never be read.
--Basic RegEx Chatbot is not as useful as the A.I. ChatBot, and it will be deprecated
+- A.I. Course Notes search feature is not handing off user prompt to the larger LLM
+- IRC Code Extractor may not capture all Revenue Codes from the uploaded PDF
+- Capital Gains calculator may has difficulty determining if there is a NSTCL or a NSTCG
+- Feedback submitted by users is not forwarded to me, and it ends up in the "void" where it will never be read.
+- Basic RegEx Chatbot is not as useful as the A.I. ChatBot, and it will be deprecated
 
   ## Acknowledgments
 
