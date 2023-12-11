@@ -60,7 +60,7 @@ The project is built using the following technologies:
 - No commerically available web design tools were utilized.
 - When I found myself stuck trying to debug code, I would have ChatGPT read through forum discussions to try and inference a possible solution.
 - I also utilized Google Chrome's debugging and console tools to figure out where the issues were. (It proved quite useful to determine whether the LLM was loaded into cache)
-- Knowlegde gained from Professor Colarusso's was used to build the IRC Code extractor tool, as it relies on the extensive use of regular expression logic to scrape the document for relevant terms.
+- Knowlegde gained from Professor David Colarusso's course was used to build the IRC Code extractor tool, as it relies on the extensive use of regular expression logic to scrape the uploaded document for relevant terms.
 
 ## Acknowledgments
 
