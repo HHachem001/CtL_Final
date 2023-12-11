@@ -142,6 +142,11 @@ body::before {
         </div>
     </div>
 
+	<div id="disclaimer">
+    <p>This page will be deprecated soon. For better assistance, please use our A.I. ChatBot:</p>
+    <button id="redirect-btn" onclick="redirectToChatBot()">Go to ChatBot</button>
+</div>
+	
     <script>
     document.addEventListener('DOMContentLoaded', startChat);
 
@@ -385,6 +390,15 @@ function redirectToWelcome() {
     window.location.href = 'https://hhachem001.github.io/CtL_Final/Welcome.html';
 }
     </script>
+
+	
+<script>
+    function redirectToChatBot() {
+        // Redirect users to the A.I. ChatBot page
+        window.location.href = 'https://hhachem001.github.io/CtL_Final/general.html';
+    }
+</script>
+	
 </body>
 
 </html>
