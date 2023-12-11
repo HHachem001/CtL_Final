@@ -135,6 +135,10 @@ body::before {
             <button id="exit-btn" onclick="redirectToWelcome()">Exit</button>
         </div>
         <div id="chat-messages"></div>
+	    <div id="disclaimer">
+    <p>This page will be deprecated soon. For better assistance, please use our A.I. ChatBot:</p>
+    <button id="redirect-btn" onclick="redirectToChatBot()">Go to ChatBot</button>
+</div>
         <div id="user-input">
             <input type="text" id="input-text" placeholder="Type here...">
             <!-- Keep the onclick attribute as "sendMessage" -->
@@ -142,10 +146,7 @@ body::before {
         </div>
     </div>
 
-	<div id="disclaimer">
-    <p>This page will be deprecated soon. For better assistance, please use our A.I. ChatBot:</p>
-    <button id="redirect-btn" onclick="redirectToChatBot()">Go to ChatBot</button>
-</div>
+	
 	
     <script>
     document.addEventListener('DOMContentLoaded', startChat);
